@@ -6,7 +6,7 @@ package com.lsj.core.spring.grpc.server.config.properties;
  */
 public class LsjGRpcServerDiscoveryProperties {
 
-    private Boolean enabled = Boolean.FALSE;
+    private Boolean enabled;
 
     /**
      * grpc端口.

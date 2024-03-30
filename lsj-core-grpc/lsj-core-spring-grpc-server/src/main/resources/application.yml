@@ -1,0 +1,5 @@
+lsj:
+  grpc:
+    discovery:
+      enabled: true
+
