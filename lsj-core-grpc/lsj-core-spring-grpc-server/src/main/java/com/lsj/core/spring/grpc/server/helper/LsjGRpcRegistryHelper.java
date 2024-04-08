@@ -3,9 +3,11 @@ package com.lsj.core.spring.grpc.server.helper;
 import com.lsj.core.spring.grpc.server.config.properties.LsjGRpcServerProperties;
 import com.lsj.core.spring.grpc.server.serviceregistry.LsjGRpcRegistration;
 import com.lsj.core.spring.grpc.server.serviceregistry.LsjGRpcServiceRegistryManager;
+import com.lsj.core.spring.grpc.server.util.LsjGRpcDiscoveryUtil;
 import io.grpc.BindableService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.core.env.Environment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +25,15 @@ public class LsjGRpcRegistryHelper {
 
     private final LsjGRpcServiceRegistryManager lsjGRpcServiceRegistryManager;
 
+    private final Environment env;
+
     public LsjGRpcRegistryHelper(
             LsjGRpcServerProperties properties,
-            LsjGRpcServiceRegistryManager lsjGRpcServiceRegistryManager) {
+            LsjGRpcServiceRegistryManager lsjGRpcServiceRegistryManager,
+            Environment env) {
         this.properties = properties;
         this.lsjGRpcServiceRegistryManager = lsjGRpcServiceRegistryManager;
+        this.env = env;
     }
 
     public void registry(Map<String, BindableService> curGrpcServiceMap) {
@@ -47,7 +53,8 @@ public class LsjGRpcRegistryHelper {
 
     protected LsjGRpcRegistration toRegistration(String name, BindableService service) {
         LsjGRpcRegistration registration = new LsjGRpcRegistration();
-        registration.setServiceId(name);
+        String serviceId = LsjGRpcDiscoveryUtil.buildServiceId(name, env, properties);
+        registration.setServiceId(serviceId);
         return registration;
     }
 }
