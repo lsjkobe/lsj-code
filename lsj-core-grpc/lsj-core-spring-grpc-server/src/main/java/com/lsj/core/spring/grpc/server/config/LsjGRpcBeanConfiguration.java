@@ -1,9 +1,9 @@
 package com.lsj.core.spring.grpc.server.config;
 
 import com.lsj.core.spring.grpc.server.config.properties.LsjGRpcServerProperties;
+import com.lsj.core.spring.grpc.server.helper.LsjGRpcRegistryHelper;
 import com.lsj.core.spring.grpc.server.helper.LsjGRpcStarterHelper;
-import com.lsj.core.spring.grpc.server.serviceregistry.LsjGRpcBaseServiceRegistrant;
-import com.lsj.core.spring.grpc.server.serviceregistry.LsjGRpcRegistration;
+import com.lsj.core.spring.grpc.server.serviceregistry.ILsjGRpcServiceRegistrant;
 import com.lsj.core.spring.grpc.server.serviceregistry.LsjGRpcServiceRegistryManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,14 +18,23 @@ import java.util.List;
 public class LsjGRpcBeanConfiguration {
 
     @Bean
-    public LsjGRpcStarterHelper lsjGRpcStarterHelper(LsjGRpcServerProperties properties) {
-        return new LsjGRpcStarterHelper(properties);
+    public LsjGRpcStarterHelper lsjGRpcStarterHelper(
+            LsjGRpcServerProperties properties,
+            LsjGRpcRegistryHelper lsjGRpcRegistryHelper) {
+        return new LsjGRpcStarterHelper(properties, lsjGRpcRegistryHelper);
+    }
+
+    @Bean
+    public LsjGRpcRegistryHelper lsjGRpcRegistryHelper(
+            LsjGRpcServerProperties properties,
+            LsjGRpcServiceRegistryManager lsjGRpcServiceRegistryManager) {
+        return new LsjGRpcRegistryHelper(properties, lsjGRpcServiceRegistryManager);
     }
 
     @Bean
     public LsjGRpcServiceRegistryManager lsjGRpcServiceRegistryManager(
             LsjGRpcServerProperties properties,
-            List<LsjGRpcBaseServiceRegistrant<? extends LsjGRpcRegistration>> registrantList) {
+            List<ILsjGRpcServiceRegistrant> registrantList) {
         return new LsjGRpcServiceRegistryManager(properties, registrantList);
     }
 }

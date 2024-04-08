@@ -30,7 +30,7 @@ public class LsjGRpcServiceConfig {
     public void initServices() {
         Map<String, BindableService> grpcServiceList = SpringContextUtil.getBeansOfType(BindableService.class);
         try {
-            lsjGRpcStarterHelper.start(grpcServiceList.values());
+            lsjGRpcStarterHelper.start(grpcServiceList);
         } catch (Exception e) {
             logger.error("GRpc 服务启动失败", e);
             throw new RuntimeException(e);

@@ -7,7 +7,7 @@ import io.grpc.stub.StreamObserver;
  * @author lishangjian
  * @date 2024/3/29 15:53
  */
-@LsjGRpcService
+@LsjGRpcService("helloWorldService")
 public class HelloWorldService extends GreeterGrpc.GreeterImplBase {
 
     @Override

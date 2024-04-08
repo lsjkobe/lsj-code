@@ -8,24 +8,11 @@ public class LsjGRpcServerDiscoveryProperties {
 
     private Boolean enabled;
 
-    /**
-     * grpc端口.
-     */
-    private LsjGRpcServerDiscoveryInfoProperties nacos = new LsjGRpcServerDiscoveryInfoProperties();
-
     public Boolean getEnabled() {
         return enabled;
     }
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public LsjGRpcServerDiscoveryInfoProperties getNacos() {
-        return nacos;
-    }
-
-    public void setNacos(LsjGRpcServerDiscoveryInfoProperties nacos) {
-        this.nacos = nacos;
     }
 }

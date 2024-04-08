@@ -10,4 +10,9 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface LsjGRpcService {
+
+    /**
+     * 服务名称
+     */
+    String value() default "";
 }

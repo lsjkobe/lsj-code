@@ -7,47 +7,64 @@ import io.grpc.ServerBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.io.Closeable;
+import java.util.*;
 
 /**
  * @author lishangjian
  * @date 2024/3/29 17:29
  */
-public class LsjGRpcStarterHelper {
+public class LsjGRpcStarterHelper implements Closeable {
 
     private final static Log logger = LogFactory.getLog(LsjGRpcStarterHelper.class);
 
     private final LsjGRpcServerProperties properties;
 
-    List<BindableService> serviceList;
+    LsjGRpcRegistryHelper lsjGRpcRegistryHelper;
 
-    public LsjGRpcStarterHelper(LsjGRpcServerProperties properties) {
+    private Map<String, BindableService> grpcServiceMap;
+
+    private Server grpcServer;
+
+    public LsjGRpcStarterHelper(
+            LsjGRpcServerProperties properties,
+            LsjGRpcRegistryHelper lsjGRpcRegistryHelper) {
         this.properties = properties;
+        this.lsjGRpcRegistryHelper = lsjGRpcRegistryHelper;
     }
 
-    public void setServiceList(List<BindableService> serviceList) {
-        this.serviceList = serviceList;
+    public void setServiceList(Map<String, BindableService> grpcServiceMap) {
+        this.grpcServiceMap = grpcServiceMap;
     }
 
     public void start() throws Exception {
         Integer port = properties.getPort();
         ServerBuilder<?> serverBuilder = ServerBuilder
                 .forPort(port);
-        for (BindableService bindableService : serviceList) {
+        for (BindableService bindableService : grpcServiceMap.values()) {
             serverBuilder.addService(bindableService);
         }
-        Server server = serverBuilder.build().start();
+        grpcServer = serverBuilder.build().start();
         logger.info("GRpc server started, port : " + port);
-        server.awaitTermination();
+        lsjGRpcRegistryHelper.registry(grpcServiceMap);
+        grpcServer.awaitTermination();
     }
 
-    public void start(Collection<BindableService> curServiceList) throws Exception {
-        if (serviceList == null) {
-            serviceList = new ArrayList<>();
+    public void start(Map<String, BindableService> curGrpcServiceMap) throws Exception {
+        if (grpcServiceMap == null) {
+            grpcServiceMap = new HashMap<>();
         }
-        serviceList.addAll(curServiceList);
+        grpcServiceMap.putAll(curGrpcServiceMap);
         start();
+    }
+
+    @Override
+    public void close() {
+        if (grpcServer == null) {
+            return;
+        }
+        if (!grpcServer.isTerminated()) {
+            grpcServer.shutdown();
+        }
     }
 }
