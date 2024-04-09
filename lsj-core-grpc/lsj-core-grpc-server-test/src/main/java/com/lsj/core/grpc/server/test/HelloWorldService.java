@@ -1,6 +1,6 @@
 package com.lsj.core.grpc.server.test;
 
-import com.lsj.core.grpc.core.annotation.LsjGRpcService;
+import com.lsj.core.spring.grpc.core.annotation.LsjGRpcService;
 import io.grpc.stub.StreamObserver;
 
 /**

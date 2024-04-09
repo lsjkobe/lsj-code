@@ -1,4 +1,4 @@
-package com.lsj.core.grpc.core.annotation;
+package com.lsj.core.spring.grpc.core.annotation;
 
 import java.lang.annotation.*;
 

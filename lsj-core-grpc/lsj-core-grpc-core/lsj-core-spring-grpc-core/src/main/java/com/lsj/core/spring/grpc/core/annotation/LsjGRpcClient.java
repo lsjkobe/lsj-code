@@ -1,4 +1,4 @@
-package com.lsj.core.grpc.core.annotation;
+package com.lsj.core.spring.grpc.core.annotation;
 
 import java.lang.annotation.*;
 
@@ -6,8 +6,10 @@ import java.lang.annotation.*;
  * @author lishangjian
  * @date 2024/3/28 11:48
  */
-@Target(ElementType.TYPE)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface LsjGRpcClient {
+
+    String serviceId();
 }

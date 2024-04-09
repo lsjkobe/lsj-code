@@ -1,6 +1,6 @@
 package com.lsj.core.spring.grpc.server.config;
 
-import com.lsj.core.grpc.core.annotation.LsjGRpcService;
+import com.lsj.core.spring.grpc.core.annotation.LsjGRpcService;
 import com.lsj.core.spring.grpc.server.annotation.EnableLsjGRpc;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
