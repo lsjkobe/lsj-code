@@ -1,7 +1,7 @@
 package com.lsj.core.spring.grpc.server.config;
 
 import com.lsj.core.spring.grpc.server.helper.LsjGRpcStarterHelper;
-import com.lsj.core.spring.grpc.server.util.SpringContextUtil;
+import com.lsj.core.spring.grpc.core.util.SpringContextUtil;
 import io.grpc.BindableService;
 import jakarta.annotation.PostConstruct;
 import org.apache.commons.logging.Log;

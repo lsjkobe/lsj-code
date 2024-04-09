@@ -1,4 +1,4 @@
-package com.lsj.core.spring.grpc.server.util;
+package com.lsj.core.spring.grpc.core.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
