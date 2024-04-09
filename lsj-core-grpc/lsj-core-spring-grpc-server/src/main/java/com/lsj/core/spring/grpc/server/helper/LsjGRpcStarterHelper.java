@@ -1,6 +1,6 @@
 package com.lsj.core.spring.grpc.server.helper;
 
-import com.lsj.core.spring.grpc.server.config.properties.LsjGRpcServerProperties;
+import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcProperties;
 import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -8,7 +8,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.Closeable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author lishangjian
@@ -18,7 +19,7 @@ public class LsjGRpcStarterHelper implements Closeable {
 
     private final static Log logger = LogFactory.getLog(LsjGRpcStarterHelper.class);
 
-    private final LsjGRpcServerProperties properties;
+    private final LsjGRpcProperties properties;
 
     LsjGRpcRegistryHelper lsjGRpcRegistryHelper;
 
@@ -27,7 +28,7 @@ public class LsjGRpcStarterHelper implements Closeable {
     private Server grpcServer;
 
     public LsjGRpcStarterHelper(
-            LsjGRpcServerProperties properties,
+            LsjGRpcProperties properties,
             LsjGRpcRegistryHelper lsjGRpcRegistryHelper) {
         this.properties = properties;
         this.lsjGRpcRegistryHelper = lsjGRpcRegistryHelper;

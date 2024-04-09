@@ -1,6 +1,6 @@
 package com.lsj.core.spring.grpc.server.util;
 
-import com.lsj.core.spring.grpc.server.config.properties.LsjGRpcServerProperties;
+import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
 
@@ -10,7 +10,7 @@ import org.springframework.core.env.Environment;
  */
 public class LsjGRpcDiscoveryUtil {
 
-    public static String buildServiceId(String name, Environment env, LsjGRpcServerProperties properties) {
+    public static String buildServiceId(String name, Environment env, LsjGRpcProperties properties) {
         String appName = env.getProperty("spring.application.name");
         return StringUtils.firstNonBlank(appName, properties.getDiscovery().getName()) + "#" + name;
     }

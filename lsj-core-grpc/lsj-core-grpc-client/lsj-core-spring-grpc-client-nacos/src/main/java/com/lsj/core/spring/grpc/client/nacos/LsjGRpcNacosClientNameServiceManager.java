@@ -3,8 +3,7 @@ package com.lsj.core.spring.grpc.client.nacos;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
-import com.lsj.core.spring.grpc.client.LsjGRpcClientProperties;
-import com.lsj.core.spring.grpc.server.nacos.config.properties.LsjGRpcServerDiscoveryNacosProperties;
+import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcProperties;
 
 import java.util.Objects;
 import java.util.Properties;
@@ -17,22 +16,22 @@ public class LsjGRpcNacosClientNameServiceManager {
 
     private volatile NamingService namingService;
 
-    private final LsjGRpcClientProperties clientProperties;
+    private final LsjGRpcProperties properties;
 
-    public LsjGRpcNacosClientNameServiceManager(LsjGRpcClientProperties clientProperties) {
-        this.clientProperties = clientProperties;
+    public LsjGRpcNacosClientNameServiceManager(LsjGRpcProperties properties) {
+        this.properties = properties;
     }
 
     public NamingService getNamingService() {
         if (Objects.isNull(this.namingService)) {
-            buildNamingService(clientProperties.getNacosProperties());
+//            buildNamingService(clientProperties.getNacosProperties());
         }
         return namingService;
     }
 
     private NamingService buildNamingService(Properties properties) {
         if (Objects.isNull(namingService)) {
-            synchronized (LsjGRpcNacosNameServiceManager.class) {
+            synchronized (LsjGRpcNacosClientNameServiceManager.class) {
                 if (Objects.isNull(namingService)) {
                     namingService = createNewNamingService(properties);
                 }

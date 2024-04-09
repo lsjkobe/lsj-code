@@ -1,8 +1,8 @@
 package com.lsj.core.spring.grpc.client.config;
 
-import com.lsj.core.spring.grpc.client.LsjGRpcClientProperties;
 import com.lsj.core.spring.grpc.client.discovery.LsjGRpcClientDiscoveryManager;
 import com.lsj.core.spring.grpc.core.util.SpringContextUtil;
+import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 
@@ -15,7 +15,7 @@ public class LsjGRpcClientBeanConfiguration {
 
     @Bean
     public LsjGRpcClientDiscoveryManager lsjGRpcClientDiscoveryManager(
-            LsjGRpcClientProperties clientProperties) {
-        return new LsjGRpcClientDiscoveryManager(clientProperties);
+            LsjGRpcProperties properties) {
+        return new LsjGRpcClientDiscoveryManager(properties);
     }
 }

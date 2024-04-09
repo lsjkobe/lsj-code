@@ -1,8 +1,8 @@
 package com.lsj.core.spring.grpc.client.discovery;
 
-import com.lsj.core.spring.grpc.client.LsjGRpcClientProperties;
 import com.lsj.core.spring.grpc.core.enums.EDiscoveryType;
 import com.lsj.core.spring.grpc.core.util.SpringContextUtil;
+import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcProperties;
 
 import java.util.Collection;
 import java.util.Map;
@@ -16,10 +16,10 @@ public class LsjGRpcClientDiscoveryManager {
 
     private static Map<EDiscoveryType, LsjGRpcClientDiscoveryHandler> HANDLER;
 
-    private static LsjGRpcClientProperties clientProperties = null;
+    private static LsjGRpcProperties properties = null;
 
-    public LsjGRpcClientDiscoveryManager(LsjGRpcClientProperties clientProperties) {
-        LsjGRpcClientDiscoveryManager.clientProperties = clientProperties;
+    public LsjGRpcClientDiscoveryManager(LsjGRpcProperties properties) {
+        LsjGRpcClientDiscoveryManager.properties = properties;
     }
 
     public void init() {
@@ -28,6 +28,6 @@ public class LsjGRpcClientDiscoveryManager {
     }
 
     public static LsjGRpcClientDiscoveryHandler getDiscoveryHandler() {
-        return HANDLER.get(clientProperties.getDiscoveryType());
+        return HANDLER.get(properties.getClient().getDiscoveryType());
     }
 }

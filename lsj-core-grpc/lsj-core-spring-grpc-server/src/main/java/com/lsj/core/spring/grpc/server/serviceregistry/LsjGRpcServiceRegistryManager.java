@@ -1,6 +1,6 @@
 package com.lsj.core.spring.grpc.server.serviceregistry;
 
-import com.lsj.core.spring.grpc.server.config.properties.LsjGRpcServerProperties;
+import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcProperties;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,13 +15,13 @@ public class LsjGRpcServiceRegistryManager {
 
     private final static Log logger = LogFactory.getLog(LsjGRpcServiceRegistryManager.class);
 
-    private final LsjGRpcServerProperties properties;
+    private final LsjGRpcProperties properties;
 
     private List<LsjGRpcRegistration> registrationList;
 
     private List<ILsjGRpcServiceRegistrant> registrantList;
 
-    public LsjGRpcServiceRegistryManager(LsjGRpcServerProperties properties,
+    public LsjGRpcServiceRegistryManager(LsjGRpcProperties properties,
                                          List<ILsjGRpcServiceRegistrant> registrantList) {
         this.properties = properties;
         this.registrantList = registrantList;

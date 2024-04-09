@@ -1,6 +1,6 @@
 package com.lsj.core.spring.grpc.server.helper;
 
-import com.lsj.core.spring.grpc.server.config.properties.LsjGRpcServerProperties;
+import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcProperties;
 import com.lsj.core.spring.grpc.server.serviceregistry.LsjGRpcRegistration;
 import com.lsj.core.spring.grpc.server.serviceregistry.LsjGRpcServiceRegistryManager;
 import com.lsj.core.spring.grpc.server.util.LsjGRpcDiscoveryUtil;
@@ -21,14 +21,14 @@ public class LsjGRpcRegistryHelper {
 
     private final static Log logger = LogFactory.getLog(LsjGRpcRegistryHelper.class);
 
-    private final LsjGRpcServerProperties properties;
+    private final LsjGRpcProperties properties;
 
     private final LsjGRpcServiceRegistryManager lsjGRpcServiceRegistryManager;
 
     private final Environment env;
 
     public LsjGRpcRegistryHelper(
-            LsjGRpcServerProperties properties,
+            LsjGRpcProperties properties,
             LsjGRpcServiceRegistryManager lsjGRpcServiceRegistryManager,
             Environment env) {
         this.properties = properties;

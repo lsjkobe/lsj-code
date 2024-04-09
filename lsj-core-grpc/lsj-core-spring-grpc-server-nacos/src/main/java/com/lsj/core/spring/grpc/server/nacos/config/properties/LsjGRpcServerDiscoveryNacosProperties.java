@@ -3,7 +3,7 @@ package com.lsj.core.spring.grpc.server.nacos.config.properties;
 import com.alibaba.nacos.api.naming.PreservedMetadataKeys;
 import com.alibaba.nacos.client.naming.utils.UtilAndComs;
 import com.lsj.commonutil.util.common.InetUtils;
-import com.lsj.core.spring.grpc.server.config.properties.LsjGRpcServerDiscoveryInfoProperties;
+import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcDiscoveryInfoProperties;
 import com.lsj.core.spring.grpc.server.consts.LsjGRpcServerConst;
 import jakarta.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +22,7 @@ import static com.alibaba.nacos.api.PropertyKeyConst.*;
  * @date 2024/3/30 18:18
  */
 @ConfigurationProperties(value = LsjGRpcServerConst.CONST_DISCOVERY_PROPERTIES_PATH + ".nacos")
-public class LsjGRpcServerDiscoveryNacosProperties extends LsjGRpcServerDiscoveryInfoProperties {
+public class LsjGRpcServerDiscoveryNacosProperties extends LsjGRpcDiscoveryInfoProperties {
 
     /**
      * the domain name of a service, through which the server address can be dynamically
