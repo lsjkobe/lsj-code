@@ -1,5 +1,6 @@
 package com.lsj.core.spring.grpc.discovery.config;
 
+import com.lsj.commonutil.util.common.InetUtils;
 import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -14,5 +15,10 @@ public class LsjGRpcBeanConfig {
     @ConditionalOnMissingBean
     public LsjGRpcProperties lsjGRpcProperties() {
         return new LsjGRpcProperties();
+    }
+
+    @Bean
+    public InetUtils inetUtils() {
+        return new InetUtils();
     }
 }
