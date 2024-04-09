@@ -12,11 +12,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class LsjGRpcClientProperties {
 
     /**
-     * grpc端口.
-     */
-    private Integer port = 9092;
-
-    /**
      * 使用的服务发现类型.
      */
     private EDiscoveryType discoveryType;

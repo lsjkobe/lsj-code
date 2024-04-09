@@ -7,7 +7,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
-import org.springframework.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
@@ -32,7 +31,9 @@ public class LsjGRpcClientComponentScanRegistrar implements BeanPostProcessor {
                     // 例如，获取注解实例
                     LsjGRpcClient lsjGRpcClient = field.getAnnotation(LsjGRpcClient.class);
                     try {
-                        field.set(bean, getProxy(clazz, field));
+                        Class<?>[] argumentTypes = buildProxyArgumentTypes();
+                        Object[] arguments = buildProxyArguments(lsjGRpcClient);
+                        field.set(bean, getProxy(clazz, field, argumentTypes, arguments));
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -43,7 +44,19 @@ public class LsjGRpcClientComponentScanRegistrar implements BeanPostProcessor {
         return bean;
     }
 
-    private Object getProxy(Class<?> clazz, Field field) throws Exception {
+    private Class<?>[] buildProxyArgumentTypes() {
+        Class<?>[] clzs = new Class[1];
+        clzs[0] = String.class;
+        return clzs;
+    }
+
+    private Object[] buildProxyArguments(LsjGRpcClient lsjGRpcClient) {
+        Object[] objects = new Object[1];
+        objects[0] = lsjGRpcClient.serviceId();
+        return objects;
+    }
+
+    private Object getProxy(Class<?> clazz, Field field, Class<?>[] argumentTypes, Object[] arguments) {
         Class<?> fieldClass = field.getType();
         if (field.getType().isInterface()) {
             // 根据注解的属性执行相应的操作
@@ -64,21 +77,7 @@ public class LsjGRpcClientComponentScanRegistrar implements BeanPostProcessor {
                 return res;
             };
             enhancer.setCallback(interceptor);
-            return enhancer.create();
-        }
-    }
-
-    private static class GrpcClientInterceptor {
-        private final ManagedChannel channel;
-
-        GrpcClientInterceptor(ManagedChannel channel) {
-            this.channel = channel;
-        }
-
-        public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-            // 在这里实现对 gRPC 客户端方法的拦截和处理
-            Object res = proxy.invoke(obj, args);
-            return res;
+            return enhancer.create(argumentTypes, arguments);
         }
     }
 
