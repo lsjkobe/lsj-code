@@ -21,4 +21,5 @@ public class LsjGRpcBeanConfig {
     public InetUtils inetUtils() {
         return new InetUtils();
     }
+
 }

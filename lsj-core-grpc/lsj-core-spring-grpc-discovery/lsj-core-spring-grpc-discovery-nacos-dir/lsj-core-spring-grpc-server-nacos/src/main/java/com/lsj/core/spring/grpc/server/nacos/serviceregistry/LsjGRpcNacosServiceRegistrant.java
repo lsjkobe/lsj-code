@@ -2,7 +2,8 @@ package com.lsj.core.spring.grpc.server.nacos.serviceregistry;
 
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
-import com.lsj.core.spring.grpc.server.nacos.config.properties.LsjGRpcServerDiscoveryNacosProperties;
+import com.lsj.core.spring.grpc.discovery.config.LsjGRpcNacosNameServiceManager;
+import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcServerDiscoveryNacosProperties;
 import com.lsj.core.spring.grpc.server.serviceregistry.LsjGRpcBaseServiceRegistrant;
 import com.lsj.core.spring.grpc.server.serviceregistry.LsjGRpcRegistration;
 import org.apache.commons.lang3.StringUtils;

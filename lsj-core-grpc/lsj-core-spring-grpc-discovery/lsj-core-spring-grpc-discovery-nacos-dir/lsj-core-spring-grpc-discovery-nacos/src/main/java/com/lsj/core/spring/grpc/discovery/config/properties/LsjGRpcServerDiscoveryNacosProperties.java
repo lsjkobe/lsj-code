@@ -1,10 +1,12 @@
-package com.lsj.core.spring.grpc.server.nacos.config.properties;
+package com.lsj.core.spring.grpc.discovery.config.properties;
 
+
+import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.naming.PreservedMetadataKeys;
 import com.alibaba.nacos.client.naming.utils.UtilAndComs;
 import com.lsj.commonutil.util.common.InetUtils;
+import com.lsj.core.spring.grpc.core.consts.LsjGRpcConst;
 import com.lsj.core.spring.grpc.core.properties.LsjGRpcDiscoveryInfoProperties;
-import com.lsj.core.spring.grpc.server.consts.LsjGRpcServerConst;
 import jakarta.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +17,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
-import static com.alibaba.nacos.api.PropertyKeyConst.*;
-
 /**
  * @author lishangjian
  * @date 2024/3/30 18:18
  */
-@ConfigurationProperties(value = LsjGRpcServerConst.CONST_DISCOVERY_PROPERTIES_PATH + ".nacos")
+@ConfigurationProperties(value = LsjGRpcConst.CONST_DISCOVERY_PROPERTIES_PATH + ".nacos")
 public class LsjGRpcServerDiscoveryNacosProperties extends LsjGRpcDiscoveryInfoProperties {
 
     /**
@@ -90,31 +90,31 @@ public class LsjGRpcServerDiscoveryNacosProperties extends LsjGRpcDiscoveryInfoP
 
     public Properties getNacosProperties() {
         Properties properties = new Properties();
-        properties.put(SERVER_ADDR, getHost());
-        properties.put(USERNAME, Objects.toString(getUserName(), ""));
-        properties.put(PASSWORD, Objects.toString(getUserPwd(), ""));
-        properties.put(NAMESPACE, namespace);
+        properties.put(PropertyKeyConst.SERVER_ADDR, getHost());
+        properties.put(PropertyKeyConst.USERNAME, Objects.toString(getUserName(), ""));
+        properties.put(PropertyKeyConst.PASSWORD, Objects.toString(getUserPwd(), ""));
+        properties.put(PropertyKeyConst.NAMESPACE, namespace);
         properties.put(UtilAndComs.NACOS_NAMING_LOG_NAME, logName);
 
         if (endpoint.contains(":")) {
             int index = endpoint.indexOf(":");
-            properties.put(ENDPOINT, endpoint.substring(0, index));
-            properties.put(ENDPOINT_PORT, endpoint.substring(index + 1));
+            properties.put(PropertyKeyConst.ENDPOINT, endpoint.substring(0, index));
+            properties.put(PropertyKeyConst.ENDPOINT_PORT, endpoint.substring(index + 1));
         } else {
-            properties.put(ENDPOINT, endpoint);
+            properties.put(PropertyKeyConst.ENDPOINT, endpoint);
         }
 
-        properties.put(ACCESS_KEY, accessKey);
-        properties.put(SECRET_KEY, secretKey);
-        properties.put(CLUSTER_NAME, clusterName);
-        properties.put(NAMING_LOAD_CACHE_AT_START, namingLoadCacheAtStart);
+        properties.put(PropertyKeyConst.ACCESS_KEY, accessKey);
+        properties.put(PropertyKeyConst.SECRET_KEY, secretKey);
+        properties.put(PropertyKeyConst.CLUSTER_NAME, clusterName);
+        properties.put(PropertyKeyConst.NAMING_LOAD_CACHE_AT_START, namingLoadCacheAtStart);
 
         return properties;
     }
 
     @PostConstruct
     public void init() throws Exception {
-        metadata.put(PreservedMetadataKeys.REGISTER_SOURCE, "SPRING_CLOUD");
+        metadata.put(PreservedMetadataKeys.REGISTER_SOURCE, "LSJ_GRPC");
         if (secure) {
             metadata.put("secure", "true");
         }
