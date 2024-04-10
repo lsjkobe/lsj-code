@@ -1,6 +1,6 @@
 package com.lsj.core.spring.grpc.server.serviceregistry;
 
-import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcProperties;
+import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

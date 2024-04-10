@@ -3,7 +3,7 @@ package com.lsj.core.spring.grpc.client.nacos;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
-import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcProperties;
+import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 
 import java.util.Objects;
 import java.util.Properties;

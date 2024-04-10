@@ -1,6 +1,6 @@
-package com.lsj.core.spring.grpc.discovery.config.properties;
+package com.lsj.core.spring.grpc.core.properties;
 
-import com.lsj.core.spring.grpc.discovery.consts.LsjGRpcConst;
+import com.lsj.core.spring.grpc.core.consts.LsjGRpcConst;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

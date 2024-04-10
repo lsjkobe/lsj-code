@@ -1,5 +1,6 @@
 package com.lsj.core.spring.grpc.discovery.config;
 
+import com.lsj.core.spring.grpc.core.config.LsjGRpcBeanConfig;
 import com.lsj.core.spring.grpc.core.util.SpringContextUtil;
 import org.springframework.context.annotation.Import;
 

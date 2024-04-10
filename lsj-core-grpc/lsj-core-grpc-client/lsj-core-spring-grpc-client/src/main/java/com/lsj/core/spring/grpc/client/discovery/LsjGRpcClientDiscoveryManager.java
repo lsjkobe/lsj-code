@@ -2,7 +2,7 @@ package com.lsj.core.spring.grpc.client.discovery;
 
 import com.lsj.core.spring.grpc.core.enums.EDiscoveryType;
 import com.lsj.core.spring.grpc.core.util.SpringContextUtil;
-import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcProperties;
+import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 
 import java.util.Collection;
 import java.util.Map;

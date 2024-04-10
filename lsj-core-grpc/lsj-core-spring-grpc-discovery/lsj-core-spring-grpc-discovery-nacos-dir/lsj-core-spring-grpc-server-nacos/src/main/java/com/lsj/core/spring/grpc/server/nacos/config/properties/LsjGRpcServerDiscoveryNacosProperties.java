@@ -3,7 +3,7 @@ package com.lsj.core.spring.grpc.server.nacos.config.properties;
 import com.alibaba.nacos.api.naming.PreservedMetadataKeys;
 import com.alibaba.nacos.client.naming.utils.UtilAndComs;
 import com.lsj.commonutil.util.common.InetUtils;
-import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcDiscoveryInfoProperties;
+import com.lsj.core.spring.grpc.core.properties.LsjGRpcDiscoveryInfoProperties;
 import com.lsj.core.spring.grpc.server.consts.LsjGRpcServerConst;
 import jakarta.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;

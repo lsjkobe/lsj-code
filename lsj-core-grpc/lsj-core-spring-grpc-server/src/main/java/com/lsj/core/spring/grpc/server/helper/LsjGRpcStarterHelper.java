@@ -1,6 +1,6 @@
 package com.lsj.core.spring.grpc.server.helper;
 
-import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcProperties;
+import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;

@@ -1,6 +1,6 @@
 package com.lsj.core.spring.grpc.server.config;
 
-import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcProperties;
+import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 import com.lsj.core.spring.grpc.server.helper.LsjGRpcRegistryHelper;
 import com.lsj.core.spring.grpc.server.helper.LsjGRpcStarterHelper;
 import com.lsj.core.spring.grpc.server.serviceregistry.ILsjGRpcServiceRegistrant;

@@ -1,4 +1,4 @@
-package com.lsj.core.spring.grpc.discovery.consts;
+package com.lsj.core.spring.grpc.core.consts;
 
 /**
  * @author lishangjian

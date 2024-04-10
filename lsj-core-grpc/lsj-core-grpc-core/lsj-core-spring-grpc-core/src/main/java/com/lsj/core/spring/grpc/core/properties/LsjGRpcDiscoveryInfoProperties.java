@@ -1,4 +1,4 @@
-package com.lsj.core.spring.grpc.discovery.config.properties;
+package com.lsj.core.spring.grpc.core.properties;
 
 import lombok.Data;
 

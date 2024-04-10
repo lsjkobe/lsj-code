@@ -2,7 +2,7 @@ package com.lsj.core.spring.grpc.client.config;
 
 import com.lsj.core.spring.grpc.client.discovery.LsjGRpcClientDiscoveryManager;
 import com.lsj.core.spring.grpc.core.util.SpringContextUtil;
-import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcProperties;
+import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 

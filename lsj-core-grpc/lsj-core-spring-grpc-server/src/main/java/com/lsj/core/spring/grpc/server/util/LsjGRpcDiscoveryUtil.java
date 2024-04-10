@@ -1,6 +1,6 @@
 package com.lsj.core.spring.grpc.server.util;
 
-import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcProperties;
+import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
 

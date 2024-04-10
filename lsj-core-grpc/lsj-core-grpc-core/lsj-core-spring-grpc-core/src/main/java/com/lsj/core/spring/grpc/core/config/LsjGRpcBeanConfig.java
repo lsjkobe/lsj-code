@@ -1,7 +1,7 @@
-package com.lsj.core.spring.grpc.discovery.config;
+package com.lsj.core.spring.grpc.core.config;
 
 import com.lsj.commonutil.util.common.InetUtils;
-import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcProperties;
+import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
