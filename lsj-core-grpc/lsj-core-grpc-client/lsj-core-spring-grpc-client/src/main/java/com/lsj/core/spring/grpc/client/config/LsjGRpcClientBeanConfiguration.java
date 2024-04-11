@@ -5,6 +5,8 @@ import com.lsj.core.spring.grpc.client.discovery.loadbalancer.LsjGRpcLoadBalance
 import com.lsj.core.spring.grpc.client.discovery.loadbalancer.LsjGRpcLoadBalancerHandler;
 import com.lsj.core.spring.grpc.client.discovery.loadbalancer.LsjGRpcServiceInstanceChooser;
 import com.lsj.core.spring.grpc.client.discovery.loadbalancer.handler.LsjGRpcLoadBalancerFactory;
+import com.lsj.core.spring.grpc.client.discovery.stub.LsjGRpcStubClientFactory;
+import com.lsj.core.spring.grpc.client.discovery.stub.handler.ILsjGRpcStubClientHandler;
 import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 import com.lsj.core.spring.grpc.core.util.SpringContextUtil;
 import org.springframework.context.annotation.Bean;
@@ -35,5 +37,11 @@ public class LsjGRpcClientBeanConfiguration {
     public LsjGRpcLoadBalancerFactory lsjGRpcLoadBalancerFactory(
             List<LsjGRpcLoadBalancerHandler<?>> handlerList) {
         return new LsjGRpcLoadBalancerFactory(handlerList);
+    }
+
+    @Bean
+    public LsjGRpcStubClientFactory lsjGRpcStubClientFactory(
+            List<ILsjGRpcStubClientHandler<?>> handlerList) {
+        return new LsjGRpcStubClientFactory(handlerList);
     }
 }

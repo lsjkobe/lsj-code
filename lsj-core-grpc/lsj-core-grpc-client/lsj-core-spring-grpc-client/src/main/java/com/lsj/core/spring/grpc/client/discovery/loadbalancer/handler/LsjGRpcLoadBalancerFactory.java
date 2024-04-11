@@ -24,7 +24,7 @@ public class LsjGRpcLoadBalancerFactory {
             loadBalancerHandlerMap.put(handler.loadBalancerType(), handler);
         }
     }
-
+    @SuppressWarnings("unchecked")
     public <T extends LsjGRpcBaseServiceInstance> LsjGRpcLoadBalancerHandler<T> getInstance(
             DiscoveryBuildStubParam param, LoadBalancerType loadBalancerType) {
         LsjGRpcLoadBalancerHandler<?> handler =  loadBalancerHandlerMap.get(loadBalancerType);

@@ -10,7 +10,7 @@ import io.grpc.stub.AbstractBlockingStub;
  */
 public interface LsjGRpcClientDiscoveryHandler {
 
-    <T extends AbstractBlockingStub<T>> T buildStub(DiscoveryBuildStubParam param);
+    <T extends AbstractBlockingStub<T>> T buildStub(DiscoveryBuildStubParam param, Class<T> stubClass);
 
     /**
      * 类型.

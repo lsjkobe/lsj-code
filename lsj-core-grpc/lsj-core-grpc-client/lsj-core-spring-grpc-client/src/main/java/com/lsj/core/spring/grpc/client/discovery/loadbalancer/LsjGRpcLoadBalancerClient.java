@@ -4,6 +4,7 @@ import com.lsj.core.spring.grpc.client.discovery.loadbalancer.handler.LsjGRpcLoa
 import com.lsj.core.spring.grpc.client.model.DiscoveryBuildStubParam;
 import com.lsj.core.spring.grpc.core.model.LsjGRpcBaseServiceInstance;
 import com.lsj.core.spring.grpc.core.model.LsjGRpcResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @author lishangjian
  * @date 2024/4/10 下午2:42
  */
+@Slf4j
 public abstract class LsjGRpcLoadBalancerClient<T extends LsjGRpcBaseServiceInstance> implements LsjGRpcServiceInstanceChooser<T> {
 
     private final LsjGRpcLoadBalancerFactory lsjGRpcLoadBalancerFactory;
@@ -44,6 +46,7 @@ public abstract class LsjGRpcLoadBalancerClient<T extends LsjGRpcBaseServiceInst
                 List<T> instanceList = getInstanceList(param);
                 listMonoSink.success(instanceList);
             } catch (Exception e) {
+                log.error("[LsjGRpcLoadBalancerClient][reactiveChoose] ");
                 listMonoSink.error(e);
             }
         });

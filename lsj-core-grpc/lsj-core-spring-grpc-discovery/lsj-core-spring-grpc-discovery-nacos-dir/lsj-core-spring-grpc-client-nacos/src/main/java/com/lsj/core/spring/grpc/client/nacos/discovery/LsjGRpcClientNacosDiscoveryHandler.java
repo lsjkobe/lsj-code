@@ -2,6 +2,7 @@ package com.lsj.core.spring.grpc.client.nacos.discovery;
 
 import com.lsj.core.spring.grpc.client.discovery.LsjGRpcClientBaseDiscoveryHandler;
 import com.lsj.core.spring.grpc.client.discovery.loadbalancer.LsjGRpcLoadBalancerClientFactory;
+import com.lsj.core.spring.grpc.client.discovery.stub.LsjGRpcStubClientFactory;
 import com.lsj.core.spring.grpc.core.enums.EDiscoveryType;
 import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 
@@ -13,8 +14,9 @@ public class LsjGRpcClientNacosDiscoveryHandler extends LsjGRpcClientBaseDiscove
 
     public LsjGRpcClientNacosDiscoveryHandler(
             LsjGRpcLoadBalancerClientFactory loadBalancerClientFactory,
+            LsjGRpcStubClientFactory clientFactory,
             LsjGRpcProperties gRpcProperties) {
-        super(loadBalancerClientFactory, gRpcProperties);
+        super(loadBalancerClientFactory, clientFactory, gRpcProperties);
     }
 
     /**

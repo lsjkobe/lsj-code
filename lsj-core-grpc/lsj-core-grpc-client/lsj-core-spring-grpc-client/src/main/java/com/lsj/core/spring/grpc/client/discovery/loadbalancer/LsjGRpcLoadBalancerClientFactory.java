@@ -23,6 +23,7 @@ public class LsjGRpcLoadBalancerClientFactory {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends LsjGRpcBaseServiceInstance> LsjGRpcServiceInstanceChooser<T> getInstance(
             DiscoveryBuildStubParam param, EDiscoveryType discoveryType) {
         LsjGRpcServiceInstanceChooser<?> handler = serviceInstanceChooserMap.get(discoveryType);

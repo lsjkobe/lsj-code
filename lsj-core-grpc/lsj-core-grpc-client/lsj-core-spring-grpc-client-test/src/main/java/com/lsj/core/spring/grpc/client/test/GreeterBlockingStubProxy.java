@@ -30,7 +30,7 @@ public class GreeterBlockingStubProxy extends LsjGrpcStubBaseProxy<GreeterGrpc.G
             DiscoveryBuildStubParam param = new DiscoveryBuildStubParam();
             param.setComponentId(componentId);
             param.setServiceName(serviceName);
-            stub = discoveryHandler.buildStub(param);
+            stub = discoveryHandler.buildStub(param, GreeterGrpc.GreeterBlockingStub.class);
         }
         return stub;
     }
