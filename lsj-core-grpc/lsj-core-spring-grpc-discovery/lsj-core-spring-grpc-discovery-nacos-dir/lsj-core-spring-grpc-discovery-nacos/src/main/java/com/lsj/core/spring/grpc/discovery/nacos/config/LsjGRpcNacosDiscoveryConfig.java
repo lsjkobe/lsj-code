@@ -1,6 +1,6 @@
-package com.lsj.core.spring.grpc.discovery.config;
+package com.lsj.core.spring.grpc.discovery.nacos.config;
 
-import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcServerDiscoveryNacosProperties;
+import com.lsj.core.spring.grpc.discovery.nacos.config.properties.LsjGRpcServerDiscoveryNacosProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Import;
 

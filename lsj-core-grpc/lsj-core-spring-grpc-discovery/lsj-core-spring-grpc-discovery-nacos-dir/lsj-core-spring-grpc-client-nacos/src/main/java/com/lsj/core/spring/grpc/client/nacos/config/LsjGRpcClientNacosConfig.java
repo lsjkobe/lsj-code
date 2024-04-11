@@ -2,8 +2,11 @@ package com.lsj.core.spring.grpc.client.nacos.config;
 
 import com.lsj.core.spring.grpc.client.discovery.LsjGRpcClientDiscoveryHandler;
 import com.lsj.core.spring.grpc.client.discovery.loadbalancer.LsjGRpcLoadBalancerClientFactory;
+import com.lsj.core.spring.grpc.client.discovery.loadbalancer.handler.LsjGRpcLoadBalancerFactory;
 import com.lsj.core.spring.grpc.client.nacos.discovery.LsjGRpcClientNacosDiscoveryHandler;
+import com.lsj.core.spring.grpc.client.nacos.discovery.loadbalancer.LsjGRpcNacosLoadBalancerClient;
 import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
+import com.lsj.core.spring.grpc.discovery.nacos.config.LsjGRpcNacosNameServiceManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,5 +23,12 @@ public class LsjGRpcClientNacosConfig {
             LsjGRpcLoadBalancerClientFactory loadBalancerClientFactory,
             LsjGRpcProperties gRpcProperties) {
         return new LsjGRpcClientNacosDiscoveryHandler(loadBalancerClientFactory, gRpcProperties);
+    }
+
+    @Bean
+    public LsjGRpcNacosLoadBalancerClient lsjGRpcNacosLoadBalancerClient(
+            LsjGRpcLoadBalancerFactory loadBalancerFactory,
+            LsjGRpcNacosNameServiceManager nacosNameServiceManager) {
+        return new LsjGRpcNacosLoadBalancerClient(loadBalancerFactory, nacosNameServiceManager);
     }
 }

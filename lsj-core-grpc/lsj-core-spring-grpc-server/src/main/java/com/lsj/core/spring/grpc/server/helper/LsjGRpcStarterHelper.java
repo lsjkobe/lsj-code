@@ -47,7 +47,7 @@ public class LsjGRpcStarterHelper implements Closeable {
         }
         grpcServer = serverBuilder.build().start();
         logger.info("GRpc server started, port : " + port);
-        lsjGRpcRegistryHelper.registry(grpcServiceMap);
+        lsjGRpcRegistryHelper.registry(port, grpcServiceMap);
         grpcServer.awaitTermination();
     }
 

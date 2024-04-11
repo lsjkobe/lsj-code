@@ -1,8 +1,9 @@
 package com.lsj.core.spring.grpc.client.discovery.loadbalancer;
 
 import com.lsj.core.spring.grpc.client.discovery.loadbalancer.handler.LsjGRpcLoadBalancerFactory;
+import com.lsj.core.spring.grpc.client.model.DiscoveryBuildStubParam;
+import com.lsj.core.spring.grpc.core.model.LsjGRpcBaseServiceInstance;
 import com.lsj.core.spring.grpc.core.model.LsjGRpcResponse;
-import com.lsj.core.spring.grpc.core.model.LsjGRpcServiceInstance;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @author lishangjian
  * @date 2024/4/10 下午2:42
  */
-public abstract class LsjGRpcLoadBalancerClient<T extends LsjGRpcServiceInstance> implements LsjGRpcServiceInstanceChooser<T> {
+public abstract class LsjGRpcLoadBalancerClient<T extends LsjGRpcBaseServiceInstance> implements LsjGRpcServiceInstanceChooser<T> {
 
     private final LsjGRpcLoadBalancerFactory lsjGRpcLoadBalancerFactory;
 
@@ -24,12 +25,12 @@ public abstract class LsjGRpcLoadBalancerClient<T extends LsjGRpcServiceInstance
     /**
      * 选择.
      *
-     * @param serviceId .
+     * @param param .
      * @return .
      */
     @Override
-    public T choose(String serviceId) {
-        LsjGRpcResponse<T> resp = Mono.from(reactiveChoose(serviceId)).block();
+    public T choose(DiscoveryBuildStubParam param) {
+        LsjGRpcResponse<T> resp = Mono.from(reactiveChoose(param)).block();
         if (resp == null) {
             return null;
         }
@@ -37,12 +38,18 @@ public abstract class LsjGRpcLoadBalancerClient<T extends LsjGRpcServiceInstance
     }
 
     @Override
-    public Publisher<LsjGRpcResponse<T>> reactiveChoose(String serviceId) {
-        LsjGRpcBaseLoadBalancerFlux<T> flux = new LsjGRpcBaseLoadBalancerFlux<>(
-                () -> getInstanceList(serviceId));
-        LsjGRpcLoadBalancerHandler<T> handler = lsjGRpcLoadBalancerFactory.getInstance(serviceId);
-        return flux.next().map(handler::choose);
+    public Publisher<LsjGRpcResponse<T>> reactiveChoose(DiscoveryBuildStubParam param) {
+        Mono<List<T>> mono = Mono.create(listMonoSink -> {
+            try {
+                List<T> instanceList = getInstanceList(param);
+                listMonoSink.success(instanceList);
+            } catch (Exception e) {
+                listMonoSink.error(e);
+            }
+        });
+        LsjGRpcLoadBalancerHandler<T> handler = lsjGRpcLoadBalancerFactory.getInstance(param);
+        return mono.map(handler::choose);
     }
 
-    protected abstract List<T> getInstanceList(String serviceId);
+    protected abstract List<T> getInstanceList(DiscoveryBuildStubParam param);
 }

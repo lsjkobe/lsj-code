@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("test")
 public class LsjTest {
 
-    @LsjGRpcClient(serviceId = "12345")
+    @LsjGRpcClient(serviceName = "test", componentId = "12345")
     private ILsjTest2 test;
 
-    @LsjGRpcClient(serviceId = "greeterBlockingStub")
+    @LsjGRpcClient(serviceName = "core-grpc-server-test", componentId = "helloWorldService")
     private GreeterBlockingStubProxy greeterBlockingStubProxy;
 
     @GetMapping("test")

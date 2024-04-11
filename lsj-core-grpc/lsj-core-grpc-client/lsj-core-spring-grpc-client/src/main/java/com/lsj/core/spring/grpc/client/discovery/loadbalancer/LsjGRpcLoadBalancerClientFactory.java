@@ -2,7 +2,7 @@ package com.lsj.core.spring.grpc.client.discovery.loadbalancer;
 
 import com.lsj.core.spring.grpc.client.model.DiscoveryBuildStubParam;
 import com.lsj.core.spring.grpc.core.enums.EDiscoveryType;
-import com.lsj.core.spring.grpc.core.model.LsjGRpcServiceInstance;
+import com.lsj.core.spring.grpc.core.model.LsjGRpcBaseServiceInstance;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +23,7 @@ public class LsjGRpcLoadBalancerClientFactory {
         }
     }
 
-    public <T extends LsjGRpcServiceInstance> LsjGRpcServiceInstanceChooser<T> getInstance(
+    public <T extends LsjGRpcBaseServiceInstance> LsjGRpcServiceInstanceChooser<T> getInstance(
             DiscoveryBuildStubParam param, EDiscoveryType discoveryType) {
         LsjGRpcServiceInstanceChooser<?> handler = serviceInstanceChooserMap.get(discoveryType);
         return (LsjGRpcServiceInstanceChooser<T>) handler;

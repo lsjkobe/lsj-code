@@ -1,6 +1,6 @@
-package com.lsj.core.spring.grpc.discovery.config;
+package com.lsj.core.spring.grpc.discovery.nacos.config;
 
-import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcServerDiscoveryNacosProperties;
+import com.lsj.core.spring.grpc.discovery.nacos.config.properties.LsjGRpcServerDiscoveryNacosProperties;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -14,4 +14,5 @@ public class LsjGRpcNacosDiscoveryBeanConfig {
             LsjGRpcServerDiscoveryNacosProperties discoveryNacosProperties) {
         return new LsjGRpcNacosNameServiceManager(discoveryNacosProperties);
     }
+
 }

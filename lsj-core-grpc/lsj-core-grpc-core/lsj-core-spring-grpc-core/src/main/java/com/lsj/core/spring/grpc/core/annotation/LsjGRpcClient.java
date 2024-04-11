@@ -6,10 +6,12 @@ import java.lang.annotation.*;
  * @author lishangjian
  * @date 2024/3/28 11:48
  */
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface LsjGRpcClient {
 
-    String serviceId();
+    String serviceName();
+
+    String componentId();
 }

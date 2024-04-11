@@ -45,14 +45,16 @@ public class LsjGRpcClientComponentScanRegistrar implements BeanPostProcessor {
     }
 
     private Class<?>[] buildProxyArgumentTypes() {
-        Class<?>[] clzs = new Class[1];
+        Class<?>[] clzs = new Class[2];
         clzs[0] = String.class;
+        clzs[1] = String.class;
         return clzs;
     }
 
     private Object[] buildProxyArguments(LsjGRpcClient lsjGRpcClient) {
-        Object[] objects = new Object[1];
-        objects[0] = lsjGRpcClient.serviceId();
+        Object[] objects = new Object[2];
+        objects[0] = lsjGRpcClient.serviceName();
+        objects[1] = lsjGRpcClient.componentId();
         return objects;
     }
 

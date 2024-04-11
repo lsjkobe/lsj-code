@@ -2,15 +2,13 @@ package com.lsj.core.spring.grpc.server.nacos.serviceregistry;
 
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
-import com.lsj.core.spring.grpc.discovery.config.LsjGRpcNacosNameServiceManager;
-import com.lsj.core.spring.grpc.discovery.config.properties.LsjGRpcServerDiscoveryNacosProperties;
+import com.lsj.core.spring.grpc.discovery.nacos.config.LsjGRpcNacosNameServiceManager;
+import com.lsj.core.spring.grpc.discovery.nacos.config.properties.LsjGRpcServerDiscoveryNacosProperties;
 import com.lsj.core.spring.grpc.server.serviceregistry.LsjGRpcBaseServiceRegistrant;
 import com.lsj.core.spring.grpc.server.serviceregistry.LsjGRpcRegistration;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.springframework.util.ReflectionUtils.rethrowRuntimeException;
 
@@ -27,16 +25,11 @@ public class LsjGRpcNacosServiceRegistrant extends LsjGRpcBaseServiceRegistrant<
 
     private final LsjGRpcNacosNameServiceManager lsjGRpcNacosNameServiceManager;
 
-    private final Integer serverPort;
-
-    private final AtomicInteger port = new AtomicInteger(0);
-
     public LsjGRpcNacosServiceRegistrant(
             LsjGRpcServerDiscoveryNacosProperties discoveryNacosProperties,
-            LsjGRpcNacosNameServiceManager lsjGRpcNacosNameServiceManager, Integer serverPort) {
+            LsjGRpcNacosNameServiceManager lsjGRpcNacosNameServiceManager) {
         this.discoveryNacosProperties = discoveryNacosProperties;
         this.lsjGRpcNacosNameServiceManager = lsjGRpcNacosNameServiceManager;
-        this.serverPort = serverPort;
     }
 
     @Override
@@ -86,20 +79,7 @@ public class LsjGRpcNacosServiceRegistrant extends LsjGRpcBaseServiceRegistrant<
 
     @Override
     protected LsjGRpcRegistration getCustomRegistration(LsjGRpcRegistration registration) {
-        if (discoveryNacosProperties.getPort() < 0) {
-            if (this.getPort().get() > 0) {
-                registration.setPort(this.getPort().get());
-            } else if (serverPort != null){
-                registration.setPort(serverPort);
-            }
-        } else {
-            registration.setPort(discoveryNacosProperties.getPort());
-        }
         registration.setHost(discoveryNacosProperties.getIp());
         return registration;
-    }
-
-    public AtomicInteger getPort() {
-        return port;
     }
 }

@@ -1,4 +1,4 @@
-package com.lsj.core.spring.grpc.discovery.config.properties;
+package com.lsj.core.spring.grpc.discovery.nacos.config.properties;
 
 
 import com.alibaba.nacos.api.PropertyKeyConst;

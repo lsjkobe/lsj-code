@@ -4,12 +4,12 @@ package com.lsj.core.spring.grpc.core.model;
  * @author lishangjian
  * @date 2024/4/10 下午4:31
  */
-public interface LsjGRpcResponse<T extends LsjGRpcServiceInstance> {
+public interface LsjGRpcResponse<T extends LsjGRpcBaseServiceInstance> {
     boolean hasServer();
 
     T getServer();
 
-    static LsjGRpcResponse<LsjGRpcServiceInstance> buildEmpty() {
+    static LsjGRpcResponse<LsjGRpcBaseServiceInstance> buildEmpty() {
         return new LsjGRpcResponse<>() {
             @Override
             public boolean hasServer() {
@@ -17,13 +17,13 @@ public interface LsjGRpcResponse<T extends LsjGRpcServiceInstance> {
             }
 
             @Override
-            public LsjGRpcServiceInstance getServer() {
+            public LsjGRpcBaseServiceInstance getServer() {
                 return null;
             }
         };
     }
 
-    static <T extends LsjGRpcServiceInstance> LsjGRpcResponse<T> buildDefault(T instance) {
+    static <T extends LsjGRpcBaseServiceInstance> LsjGRpcResponse<T> buildDefault(T instance) {
         return new LsjGRpcResponse<>() {
             @Override
             public boolean hasServer() {

@@ -1,4 +1,4 @@
-package com.lsj.core.spring.grpc.server.util;
+package com.lsj.core.spring.grpc.core.util;
 
 import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +12,10 @@ public class LsjGRpcDiscoveryUtil {
 
     public static String buildServiceId(String name, Environment env, LsjGRpcProperties properties) {
         String appName = env.getProperty("spring.application.name");
-        return StringUtils.firstNonBlank(appName, properties.getDiscovery().getName()) + "#" + name;
+        return buildServiceId(StringUtils.firstNonBlank(appName, properties.getDiscovery().getName()), name);
+    }
+
+    public static String buildServiceId(String serviceName, String componentId) {
+        return serviceName + "::" + componentId;
     }
 }

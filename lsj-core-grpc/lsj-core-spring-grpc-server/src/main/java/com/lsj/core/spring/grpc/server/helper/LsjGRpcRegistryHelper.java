@@ -3,7 +3,7 @@ package com.lsj.core.spring.grpc.server.helper;
 import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 import com.lsj.core.spring.grpc.server.serviceregistry.LsjGRpcRegistration;
 import com.lsj.core.spring.grpc.server.serviceregistry.LsjGRpcServiceRegistryManager;
-import com.lsj.core.spring.grpc.server.util.LsjGRpcDiscoveryUtil;
+import com.lsj.core.spring.grpc.core.util.LsjGRpcDiscoveryUtil;
 import io.grpc.BindableService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,25 +36,26 @@ public class LsjGRpcRegistryHelper {
         this.env = env;
     }
 
-    public void registry(Map<String, BindableService> curGrpcServiceMap) {
-        List<LsjGRpcRegistration> registrationList = toRegistration(curGrpcServiceMap);
+    public void registry(Integer port, Map<String, BindableService> curGrpcServiceMap) {
+        List<LsjGRpcRegistration> registrationList = toRegistration(port, curGrpcServiceMap);
         lsjGRpcServiceRegistryManager.setRegistrationList(registrationList);
         lsjGRpcServiceRegistryManager.register();
     }
 
-    protected List<LsjGRpcRegistration> toRegistration(Map<String, BindableService> curGrpcServiceMap) {
+    protected List<LsjGRpcRegistration> toRegistration(Integer port, Map<String, BindableService> curGrpcServiceMap) {
         List<LsjGRpcRegistration> registrationList = new ArrayList<>();
         for (String name : curGrpcServiceMap.keySet()) {
             BindableService bindableService = curGrpcServiceMap.get(name);
-            registrationList.add(toRegistration(name, bindableService));
+            registrationList.add(toRegistration(name, port, bindableService));
         }
         return registrationList;
     }
 
-    protected LsjGRpcRegistration toRegistration(String name, BindableService service) {
+    protected LsjGRpcRegistration toRegistration(String name, Integer port, BindableService service) {
         LsjGRpcRegistration registration = new LsjGRpcRegistration();
         String serviceId = LsjGRpcDiscoveryUtil.buildServiceId(name, env, properties);
         registration.setServiceId(serviceId);
+        registration.setPort(port);
         return registration;
     }
 }

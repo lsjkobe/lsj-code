@@ -2,8 +2,8 @@ package com.lsj.core.spring.grpc.client.discovery.loadbalancer.handler;
 
 import com.lsj.core.spring.grpc.core.enums.ELoadBalancerType;
 import com.lsj.core.spring.grpc.core.enums.LoadBalancerType;
+import com.lsj.core.spring.grpc.core.model.LsjGRpcBaseServiceInstance;
 import com.lsj.core.spring.grpc.core.model.LsjGRpcResponse;
-import com.lsj.core.spring.grpc.core.model.LsjGRpcServiceInstance;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -16,22 +16,21 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Slf4j
 public class LsjGRpcRoundLoadBalancerHandler
-        extends LsjGRpcBaseLoadBalancerHandler<LsjGRpcServiceInstance> {
+        extends LsjGRpcBaseLoadBalancerHandler<LsjGRpcBaseServiceInstance> {
 
     final AtomicInteger position;
 
-    public LsjGRpcRoundLoadBalancerHandler(String serviceId) {
-        this(serviceId, new Random().nextInt(1000));
+    public LsjGRpcRoundLoadBalancerHandler() {
+        this(new Random().nextInt(1000));
     }
 
-    public LsjGRpcRoundLoadBalancerHandler(String serviceId, int seedPosition) {
-        super(serviceId);
+    public LsjGRpcRoundLoadBalancerHandler(int seedPosition) {
         this.position = new AtomicInteger(seedPosition);
     }
 
     @Override
-    public LsjGRpcResponse<LsjGRpcServiceInstance> choose(List<LsjGRpcServiceInstance> instanceList) {
-        return null;
+    public LsjGRpcResponse<LsjGRpcBaseServiceInstance> choose(List<LsjGRpcBaseServiceInstance> instanceList) {
+        return getInstanceResponse(instanceList);
     }
 
 
@@ -40,11 +39,8 @@ public class LsjGRpcRoundLoadBalancerHandler
         return ELoadBalancerType.ROUND;
     }
 
-    private LsjGRpcResponse<LsjGRpcServiceInstance> getInstanceResponse(List<LsjGRpcServiceInstance> instances) {
+    private LsjGRpcResponse<LsjGRpcBaseServiceInstance> getInstanceResponse(List<LsjGRpcBaseServiceInstance> instances) {
         if (instances.isEmpty()) {
-            if (log.isWarnEnabled()) {
-                log.warn("No servers available for service: " + serviceId);
-            }
             return LsjGRpcResponse.buildEmpty();
         }
         // Do not move position when there is only 1 instance, especially some suppliers
@@ -55,7 +51,7 @@ public class LsjGRpcRoundLoadBalancerHandler
         // Ignore the sign bit, this allows pos to loop sequentially from 0 to
         // Integer.MAX_VALUE
         int pos = this.position.incrementAndGet() & Integer.MAX_VALUE;
-        LsjGRpcServiceInstance instance = instances.get(pos % instances.size());
+        LsjGRpcBaseServiceInstance instance = instances.get(pos % instances.size());
         return LsjGRpcResponse.buildDefault(instance);
     }
 }

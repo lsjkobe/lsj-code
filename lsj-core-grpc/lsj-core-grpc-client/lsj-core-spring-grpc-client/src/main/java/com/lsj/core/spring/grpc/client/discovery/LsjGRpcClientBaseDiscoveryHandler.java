@@ -4,6 +4,7 @@ import com.lsj.core.spring.grpc.client.discovery.loadbalancer.LsjGRpcLoadBalance
 import com.lsj.core.spring.grpc.client.discovery.loadbalancer.LsjGRpcServiceInstanceChooser;
 import com.lsj.core.spring.grpc.client.model.DiscoveryBuildStubParam;
 import com.lsj.core.spring.grpc.core.enums.EDiscoveryType;
+import com.lsj.core.spring.grpc.core.model.LsjGRpcServiceInstance;
 import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 import io.grpc.stub.AbstractBlockingStub;
 
@@ -28,6 +29,7 @@ public abstract class LsjGRpcClientBaseDiscoveryHandler implements LsjGRpcClient
     public <T extends AbstractBlockingStub<T>> T buildStub(DiscoveryBuildStubParam param) {
         LsjGRpcServiceInstanceChooser<?> serviceInstanceChooser =
                 loadBalancerClientFactory.getInstance(param, gRpcProperties.getClient().getDiscoveryType());
+        LsjGRpcServiceInstance serviceInstance = serviceInstanceChooser.choose(param);
         return null;
     }
 
