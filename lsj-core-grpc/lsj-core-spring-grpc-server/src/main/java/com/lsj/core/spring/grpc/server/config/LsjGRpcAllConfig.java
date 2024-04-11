@@ -1,6 +1,6 @@
 package com.lsj.core.spring.grpc.server.config;
 
-import com.lsj.core.spring.grpc.discovery.config.LsjGRpcDiscoveryConfig;
+import com.lsj.core.spring.grpc.client.config.LsjGRpcDiscoveryConfig;
 import com.lsj.core.spring.grpc.server.serviceregistry.LsjGRpcServiceRegistryConfig;
 import org.springframework.context.annotation.Import;
 

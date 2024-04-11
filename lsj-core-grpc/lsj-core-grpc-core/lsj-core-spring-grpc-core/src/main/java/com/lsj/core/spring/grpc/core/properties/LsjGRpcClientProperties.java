@@ -13,6 +13,6 @@ public class LsjGRpcClientProperties {
     /**
      * 客户端使用的服务发现类型.
      */
-    private EDiscoveryType discoveryType;
+    private EDiscoveryType discoveryType = EDiscoveryType.NACOS;
 
 }

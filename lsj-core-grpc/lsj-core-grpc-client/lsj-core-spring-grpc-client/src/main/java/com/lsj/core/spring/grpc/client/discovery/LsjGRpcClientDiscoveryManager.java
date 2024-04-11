@@ -4,7 +4,9 @@ import com.lsj.core.spring.grpc.core.enums.EDiscoveryType;
 import com.lsj.core.spring.grpc.core.util.SpringContextUtil;
 import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 
+import javax.annotation.PostConstruct;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,7 +24,9 @@ public class LsjGRpcClientDiscoveryManager {
         LsjGRpcClientDiscoveryManager.properties = properties;
     }
 
+    @PostConstruct
     public void init() {
+        HANDLER = new HashMap<>();
         Collection<LsjGRpcClientDiscoveryHandler> list = SpringContextUtil.getBeansOfType(LsjGRpcClientDiscoveryHandler.class).values();
         list.forEach(item -> HANDLER.put(item.type(), item));
     }

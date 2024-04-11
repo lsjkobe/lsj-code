@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>com.lsj</groupId>
-            <artifactId>lsj-core-spring-grpc-client</artifactId>
+            <artifactId>lsj-core-spring-grpc-client-nacos</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
