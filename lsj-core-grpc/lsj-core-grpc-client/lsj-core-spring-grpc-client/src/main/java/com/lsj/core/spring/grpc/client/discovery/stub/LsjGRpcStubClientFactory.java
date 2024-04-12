@@ -1,7 +1,6 @@
 package com.lsj.core.spring.grpc.client.discovery.stub;
 
 import com.lsj.core.spring.grpc.client.discovery.stub.handler.ILsjGRpcStubClientHandler;
-import com.lsj.core.spring.grpc.client.discovery.stub.handler.LsjGRpcStubClientCommonHandler;
 import com.lsj.core.spring.grpc.core.enums.EDiscoveryType;
 import io.grpc.stub.AbstractBlockingStub;
 
@@ -17,10 +16,16 @@ public class LsjGRpcStubClientFactory {
 
     private final Map<EDiscoveryType, ILsjGRpcStubClientHandler<?>> stubClientHandlerMap;
 
+    private ILsjGRpcStubClientHandler<?> commonStubClientHandler = null;
+
     public LsjGRpcStubClientFactory(List<ILsjGRpcStubClientHandler<?>> handlerList) {
         stubClientHandlerMap = new HashMap<>();
         for (ILsjGRpcStubClientHandler<?> handler : handlerList) {
-            stubClientHandlerMap.put(handler.discoveryType(), handler);
+            if (handler.discoveryType() == null) {
+                commonStubClientHandler = handler;
+            } else {
+                stubClientHandlerMap.put(handler.discoveryType(), handler);
+            }
         }
     }
 
@@ -28,7 +33,7 @@ public class LsjGRpcStubClientFactory {
     public <T extends AbstractBlockingStub<T>> ILsjGRpcStubClientHandler<T> getInstance(EDiscoveryType discoveryType) {
         ILsjGRpcStubClientHandler<?> handler = stubClientHandlerMap.get(discoveryType);
         if (handler == null) {
-            return new LsjGRpcStubClientCommonHandler<>();
+            return (ILsjGRpcStubClientHandler<T>) commonStubClientHandler;
         }
         return (ILsjGRpcStubClientHandler<T>) handler;
     }

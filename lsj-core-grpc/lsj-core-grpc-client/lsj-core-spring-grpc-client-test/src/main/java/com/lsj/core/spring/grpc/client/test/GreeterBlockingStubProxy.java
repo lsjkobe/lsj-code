@@ -14,8 +14,6 @@ import com.lsj.core.spring.grpc.client.model.DiscoveryBuildStubParam;
  */
 public class GreeterBlockingStubProxy extends LsjGrpcStubBaseProxy<GreeterGrpc.GreeterBlockingStub> {
 
-    private GreeterGrpc.GreeterBlockingStub stub;
-
     protected GreeterBlockingStubProxy(String serviceName, String componentId) {
         super(serviceName, componentId);
     }
@@ -23,16 +21,12 @@ public class GreeterBlockingStubProxy extends LsjGrpcStubBaseProxy<GreeterGrpc.G
 
     @Override
     public GreeterGrpc.GreeterBlockingStub getStub() {
-        if (stub == null) {
-            //todo lsj 锁
-            LsjGRpcClientDiscoveryHandler discoveryHandler =
-                    LsjGRpcClientDiscoveryManager.getDiscoveryHandler();
-            DiscoveryBuildStubParam param = new DiscoveryBuildStubParam();
-            param.setComponentId(componentId);
-            param.setServiceName(serviceName);
-            stub = discoveryHandler.buildStub(param, GreeterGrpc.GreeterBlockingStub.class);
-        }
-        return stub;
+        LsjGRpcClientDiscoveryHandler discoveryHandler =
+                LsjGRpcClientDiscoveryManager.getDiscoveryHandler();
+        DiscoveryBuildStubParam param = new DiscoveryBuildStubParam();
+        param.setComponentId(componentId);
+        param.setServiceName(serviceName);
+        return discoveryHandler.buildStub(param, GreeterGrpc.GreeterBlockingStub.class);
     }
 
     public String sayHello() {

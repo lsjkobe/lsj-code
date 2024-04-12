@@ -30,25 +30,22 @@ public abstract class LsjGRpcStubClientBaseHandler<T extends AbstractBlockingStu
 
     protected ManagedChannel getManagedChannel(LsjGRpcServiceInstance serviceInstance) {
         String managedChannelKey = buildManagedChannelKey(serviceInstance);
-        return managedChannelMap.computeIfAbsent(managedChannelKey, s -> {
-            return ManagedChannelBuilder.forAddress(serviceInstance.getHost(), serviceInstance.getPort())
-                    .usePlaintext().build();
-        });
+        return managedChannelMap.computeIfAbsent(managedChannelKey,
+                s -> ManagedChannelBuilder.forAddress(serviceInstance.getHost(), serviceInstance.getPort())
+                        .usePlaintext().build());
     }
 
     protected T getStub(LsjGRpcServiceInstance serviceInstance, ManagedChannel managedChannel, Class<T> stubClass) {
         String stubKey = buildStubKey(serviceInstance);
-        return stubMap.computeIfAbsent(stubKey, s -> {
-            return T.newStub((channel, callOptions) -> {
-                try {
-                    Constructor<T> constructor = stubClass.getDeclaredConstructor(Channel.class, CallOptions.class);
-                    constructor.setAccessible(Boolean.TRUE);
-                    return constructor.newInstance(channel, callOptions);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }, managedChannel);
-        });
+        return stubMap.computeIfAbsent(stubKey, s -> T.newStub((channel, callOptions) -> {
+            try {
+                Constructor<T> constructor = stubClass.getDeclaredConstructor(Channel.class, CallOptions.class);
+                constructor.setAccessible(Boolean.TRUE);
+                return constructor.newInstance(channel, callOptions);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }, managedChannel));
     }
 
     private String buildManagedChannelKey(LsjGRpcServiceInstance serviceInstance) {

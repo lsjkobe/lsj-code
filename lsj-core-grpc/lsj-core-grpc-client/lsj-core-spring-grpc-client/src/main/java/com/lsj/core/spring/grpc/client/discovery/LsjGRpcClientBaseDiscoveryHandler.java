@@ -6,9 +6,10 @@ import com.lsj.core.spring.grpc.client.discovery.stub.LsjGRpcStubClientFactory;
 import com.lsj.core.spring.grpc.client.discovery.stub.handler.ILsjGRpcStubClientHandler;
 import com.lsj.core.spring.grpc.client.model.DiscoveryBuildStubParam;
 import com.lsj.core.spring.grpc.core.enums.EDiscoveryType;
-import com.lsj.core.spring.grpc.core.model.LsjGRpcServiceInstance;
+import com.lsj.core.spring.grpc.core.model.LsjGRpcBaseServiceInstance;
 import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 import io.grpc.stub.AbstractBlockingStub;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,10 +38,13 @@ public abstract class LsjGRpcClientBaseDiscoveryHandler implements LsjGRpcClient
     public <T extends AbstractBlockingStub<T>> T buildStub(DiscoveryBuildStubParam param, Class<T> stubClass) {
         LsjGRpcServiceInstanceChooser<?> serviceInstanceChooser =
                 loadBalancerClientFactory.getInstance(param, gRpcProperties.getClient().getDiscoveryType());
-        LsjGRpcServiceInstance serviceInstance = serviceInstanceChooser.choose(param);
+        LsjGRpcBaseServiceInstance serviceInstance = serviceInstanceChooser.choose(param);
         if (serviceInstance == null) {
             log.error("[][] [{}]/[{}] 服务不存在", param.getServiceName(), param.getComponentId());
             throw new RuntimeException("服务不存在");
+        }
+        if (StringUtils.isBlank(serviceInstance.getServiceId())) {
+            serviceInstance.setServiceId(param.buildServiceId());
         }
         ILsjGRpcStubClientHandler<T> stubClientHandler =
                 stubClientFactory.getInstance(gRpcProperties.getClient().getDiscoveryType());
