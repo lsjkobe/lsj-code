@@ -2,6 +2,7 @@ package com.lsj.core.spring.grpc.server.nacos.serviceregistry;
 
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
+import com.lsj.core.spring.grpc.core.enums.EDiscoveryType;
 import com.lsj.core.spring.grpc.discovery.nacos.config.LsjGRpcNacosNameServiceManager;
 import com.lsj.core.spring.grpc.discovery.nacos.config.properties.LsjGRpcServerDiscoveryNacosProperties;
 import com.lsj.core.spring.grpc.server.serviceregistry.LsjGRpcBaseServiceRegistrant;
@@ -81,5 +82,15 @@ public class LsjGRpcNacosServiceRegistrant extends LsjGRpcBaseServiceRegistrant<
     protected LsjGRpcRegistration getCustomRegistration(LsjGRpcRegistration registration) {
         registration.setHost(discoveryNacosProperties.getIp());
         return registration;
+    }
+
+    /**
+     * 类型.
+     *
+     * @return .
+     */
+    @Override
+    public EDiscoveryType type() {
+        return EDiscoveryType.NACOS;
     }
 }
