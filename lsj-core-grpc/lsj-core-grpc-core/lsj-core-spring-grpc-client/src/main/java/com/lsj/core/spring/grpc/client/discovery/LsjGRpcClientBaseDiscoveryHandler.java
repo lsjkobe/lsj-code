@@ -41,7 +41,7 @@ public abstract class LsjGRpcClientBaseDiscoveryHandler implements LsjGRpcClient
         LsjGRpcBaseServiceInstance serviceInstance = serviceInstanceChooser.choose(param);
         if (serviceInstance == null) {
             log.error("[][] [{}]/[{}] 服务不存在", param.getServiceName(), param.getComponentId());
-            throw new RuntimeException("服务不存在");
+            throw new RuntimeException("GRPC服务提供者不存在[" + param.buildServiceId() + "]");
         }
         if (StringUtils.isBlank(serviceInstance.getServiceId())) {
             serviceInstance.setServiceId(param.buildServiceId());

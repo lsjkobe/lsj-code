@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("test")
 public class LsjTest {
 
-    @LsjGRpcClient(serviceName = "test", componentId = "12345")
-    private ILsjTest2 test;
-
     @LsjGRpcClient(serviceName = "core-grpc-server-test", componentId = "helloWorldService")
     private GreeterBlockingStubProxy greeterBlockingStubProxy;
 
+    @LsjGRpcClient(serviceName = "core-grpc-server-test", componentId = "lsjTestService")
+    private LsjTestBlockingStubProxy lsjTestBlockingStubProxy;
+
     @GetMapping("test")
     public String sendMessage() {
-        test.test();
+        lsjTestBlockingStubProxy.doTest();
         greeterBlockingStubProxy.sayHello();
         return "";
     }

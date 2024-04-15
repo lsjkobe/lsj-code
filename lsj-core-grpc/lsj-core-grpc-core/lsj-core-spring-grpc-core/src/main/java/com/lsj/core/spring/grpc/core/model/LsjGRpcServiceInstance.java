@@ -52,4 +52,9 @@ public interface LsjGRpcServiceInstance {
     default String getScheme() {
         return null;
     }
+
+    /**
+     * @return The port of the registered service instance.
+     */
+    boolean isAvailable();
 }

@@ -1,7 +1,7 @@
 package com.lsj.core.spring.grpc.client.discovery.stub.handler;
 
 import com.lsj.core.spring.grpc.core.enums.EDiscoveryType;
-import com.lsj.core.spring.grpc.core.model.LsjGRpcServiceInstance;
+import com.lsj.core.spring.grpc.core.model.LsjGRpcBaseServiceInstance;
 import io.grpc.stub.AbstractBlockingStub;
 
 /**
@@ -10,7 +10,7 @@ import io.grpc.stub.AbstractBlockingStub;
  */
 public interface ILsjGRpcStubClientHandler<T extends AbstractBlockingStub<T>> {
 
-    T handle(LsjGRpcServiceInstance serviceInstance, Class<T> stubClass);
+    T handle(LsjGRpcBaseServiceInstance serviceInstance, Class<T> stubClass);
 
     EDiscoveryType discoveryType();
 }

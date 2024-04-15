@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface LsjGRpcLoadBalancerHandler<T extends LsjGRpcBaseServiceInstance> {
 
-    LsjGRpcResponse<T> choose(List<T> instanceList);
+    LsjGRpcResponse<T> choose(String serviceId, List<T> instanceList);
 
     LoadBalancerType loadBalancerType();
 }

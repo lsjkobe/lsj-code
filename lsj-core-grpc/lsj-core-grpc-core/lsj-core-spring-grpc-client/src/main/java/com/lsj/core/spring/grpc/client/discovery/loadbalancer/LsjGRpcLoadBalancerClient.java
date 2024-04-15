@@ -51,7 +51,7 @@ public abstract class LsjGRpcLoadBalancerClient<T extends LsjGRpcBaseServiceInst
             }
         });
         LsjGRpcLoadBalancerHandler<T> handler = lsjGRpcLoadBalancerFactory.getInstance(param);
-        return mono.map(handler::choose);
+        return mono.map(item -> handler.choose(param.buildServiceId(), item));
     }
 
     protected abstract List<T> getInstanceList(DiscoveryBuildStubParam param);

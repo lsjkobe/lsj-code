@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -18,19 +20,23 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class LsjGRpcRoundLoadBalancerHandler
         extends LsjGRpcBaseLoadBalancerHandler<LsjGRpcBaseServiceInstance> {
 
-    final AtomicInteger position;
+    final Integer position;
+
+    final ConcurrentMap<String, AtomicInteger> positionMap;
 
     public LsjGRpcRoundLoadBalancerHandler() {
         this(new Random().nextInt(1000));
     }
 
     public LsjGRpcRoundLoadBalancerHandler(int seedPosition) {
-        this.position = new AtomicInteger(seedPosition);
+        this.position = seedPosition;
+        this.positionMap = new ConcurrentHashMap<>();
     }
 
     @Override
-    public LsjGRpcResponse<LsjGRpcBaseServiceInstance> choose(List<LsjGRpcBaseServiceInstance> instanceList) {
-        return getInstanceResponse(instanceList);
+    public LsjGRpcResponse<LsjGRpcBaseServiceInstance> choose(
+            String serviceId, List<LsjGRpcBaseServiceInstance> instanceList) {
+        return getInstanceResponse(serviceId, instanceList);
     }
 
 
@@ -39,7 +45,8 @@ public class LsjGRpcRoundLoadBalancerHandler
         return ELoadBalancerType.ROUND;
     }
 
-    private LsjGRpcResponse<LsjGRpcBaseServiceInstance> getInstanceResponse(List<LsjGRpcBaseServiceInstance> instances) {
+    private LsjGRpcResponse<LsjGRpcBaseServiceInstance> getInstanceResponse(
+            String serviceId, List<LsjGRpcBaseServiceInstance> instances) {
         if (instances.isEmpty()) {
             return LsjGRpcResponse.buildEmpty();
         }
@@ -50,7 +57,8 @@ public class LsjGRpcRoundLoadBalancerHandler
         }
         // Ignore the sign bit, this allows pos to loop sequentially from 0 to
         // Integer.MAX_VALUE
-        int pos = this.position.incrementAndGet() & Integer.MAX_VALUE;
+        AtomicInteger positionAtomic = positionMap.computeIfAbsent(serviceId, k -> new AtomicInteger(position));
+        int pos = positionAtomic.incrementAndGet() & Integer.MAX_VALUE;
         LsjGRpcBaseServiceInstance instance = instances.get(pos % instances.size());
         return LsjGRpcResponse.buildDefault(instance);
     }

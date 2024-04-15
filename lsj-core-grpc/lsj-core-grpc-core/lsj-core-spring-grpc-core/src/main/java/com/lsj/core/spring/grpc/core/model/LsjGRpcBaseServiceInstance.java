@@ -28,4 +28,6 @@ public class LsjGRpcBaseServiceInstance implements LsjGRpcServiceInstance {
     private URI uri;
 
     private Map<String, String> metadata;
+
+    private boolean isAvailable;
 }

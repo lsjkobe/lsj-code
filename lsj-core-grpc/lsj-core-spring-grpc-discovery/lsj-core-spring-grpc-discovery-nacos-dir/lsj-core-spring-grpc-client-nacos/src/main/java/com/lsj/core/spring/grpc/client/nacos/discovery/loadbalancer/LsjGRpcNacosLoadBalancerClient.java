@@ -8,7 +8,7 @@ import com.lsj.core.spring.grpc.client.model.DiscoveryBuildStubParam;
 import com.lsj.core.spring.grpc.core.enums.EDiscoveryType;
 import com.lsj.core.spring.grpc.core.model.LsjGRpcBaseServiceInstance;
 import com.lsj.core.spring.grpc.discovery.nacos.config.LsjGRpcNacosNameServiceManager;
-import org.apache.commons.collections.CollectionUtils;
+import com.lsj.core.spring.grpc.discovery.nacos.utils.NacosServiceInstanceUtil;
 
 import java.util.List;
 
@@ -32,25 +32,10 @@ public class LsjGRpcNacosLoadBalancerClient extends LsjGRpcLoadBalancerClient<Ls
         try {
             String serviceId = param.buildServiceId();
             List<Instance> instanceList = nacosNameServiceManager.getNamingService().selectInstances(serviceId, true);
-            return buildServiceInstanceList(instanceList);
+            return NacosServiceInstanceUtil.buildServiceInstanceList(serviceId, instanceList);
         } catch (NacosException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private List<LsjGRpcBaseServiceInstance> buildServiceInstanceList(List<Instance> instanceList) {
-        if (CollectionUtils.isEmpty(instanceList)) {
-            return List.of();
-        }
-        return instanceList.stream().map(this::buildServiceInstance).toList();
-    }
-
-    private LsjGRpcBaseServiceInstance buildServiceInstance(Instance instance) {
-        LsjGRpcBaseServiceInstance serviceInstance = new LsjGRpcBaseServiceInstance();
-        serviceInstance.setHost(instance.getIp());
-        serviceInstance.setPort(instance.getPort());
-        serviceInstance.setWeight(instance.getWeight());
-        return serviceInstance;
     }
 
     /**
