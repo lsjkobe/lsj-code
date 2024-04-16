@@ -5,6 +5,7 @@ import com.lsj.core.spring.grpc.client.discovery.LsjGRpcClientDiscoveryManager;
 import com.lsj.core.spring.grpc.client.model.DiscoveryBuildStubParam;
 import io.grpc.stub.AbstractBlockingStub;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -13,22 +14,21 @@ import java.lang.reflect.Type;
  * @author lishangjian
  * @date 2024/4/11 下午2:09
  */
+@Setter
 @Getter
 public abstract class LsjGrpcStubBaseProxy<T extends AbstractBlockingStub<T>> implements LsjGrpcStubProxy<T> {
 
-    private final Class<T> tClass;
+    private final Class<T> stubClass;
 
-    protected final String serviceName;
+    protected String serviceName;
 
-    protected final String componentId;
+    protected String componentId;
 
-    protected LsjGrpcStubBaseProxy(String serviceName, String componentId) {
-        this.serviceName = serviceName;
-        this.componentId = componentId;
+    protected LsjGrpcStubBaseProxy() {
         ParameterizedType stubParameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
         //需要获取的泛型是第一位，所以获取0
         Type stubType = stubParameterizedType.getActualTypeArguments()[0];
-        tClass = (Class<T>) stubType;
+        stubClass = (Class<T>) stubType;
     }
 
     @Override
@@ -38,7 +38,7 @@ public abstract class LsjGrpcStubBaseProxy<T extends AbstractBlockingStub<T>> im
         DiscoveryBuildStubParam param = new DiscoveryBuildStubParam();
         param.setComponentId(componentId);
         param.setServiceName(serviceName);
-        return discoveryHandler.buildStub(param, tClass);
+        return discoveryHandler.buildStub(param, stubClass);
     }
 
 }

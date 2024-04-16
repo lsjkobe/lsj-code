@@ -13,10 +13,6 @@ import com.lsj.core.spring.grpc.core.annotation.LsjGRpcClient;
 @LsjGRpcClient(serviceName = "core-grpc-server-test", componentId = "helloWorldService")
 public class GreeterBlockingStubProxy extends LsjGrpcStubBaseProxy<GreeterGrpc.GreeterBlockingStub> {
 
-    protected GreeterBlockingStubProxy(String serviceName, String componentId) {
-        super(serviceName, componentId);
-    }
-
 
     public String sayHello() {
         HelloRequest request = HelloRequest.newBuilder().build();

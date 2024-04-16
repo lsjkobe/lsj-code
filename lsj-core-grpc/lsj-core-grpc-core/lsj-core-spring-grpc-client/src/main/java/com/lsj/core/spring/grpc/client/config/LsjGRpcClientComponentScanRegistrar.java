@@ -47,21 +47,17 @@ public class LsjGRpcClientComponentScanRegistrar implements ImportBeanDefinition
                 Class<?> clazz = Class.forName(beanClassName);
                 String beanName;
                 // 获取注解
-                LsjGRpcClient lsjGRpcServiceAnnotation = clazz.getAnnotation(LsjGRpcClient.class);
-                if (StringUtils.isNotBlank(lsjGRpcServiceAnnotation.value())) {
-                    beanName = lsjGRpcServiceAnnotation.value();
+                LsjGRpcClient lsjGRpcClient = clazz.getAnnotation(LsjGRpcClient.class);
+                if (StringUtils.isNotBlank(lsjGRpcClient.value())) {
+                    beanName = lsjGRpcClient.value();
                 } else {
                     String className = ClassUtils.getShortName(beanClassName);
                     beanName = className.substring(0, 1).toLowerCase() + className.substring(1);
                 }
-                Class<?>[] argumentTypes = buildProxyArgumentTypes();
-                Object[] arguments = buildProxyArguments(lsjGRpcServiceAnnotation);
                 // 创建BeanDefinition
                 BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(clazz);
-                // 添加构造参数
-                for (int i = 0; i < argumentTypes.length; i++) {
-                    beanDefinitionBuilder.addConstructorArgValue(arguments[i]);
-                }
+                beanDefinitionBuilder.addPropertyValue("serviceName", lsjGRpcClient.serviceName());
+                beanDefinitionBuilder.addPropertyValue("componentId", lsjGRpcClient.componentId());
                 // 将扫描到的bean注册到Spring容器
                 registry.registerBeanDefinition(beanName, beanDefinitionBuilder.getBeanDefinition());
             }
@@ -82,19 +78,5 @@ public class LsjGRpcClientComponentScanRegistrar implements ImportBeanDefinition
                     ClassUtils.getPackageName(metadata.getClassName()));
         }
         return basePackages;
-    }
-
-    private Class<?>[] buildProxyArgumentTypes() {
-        Class<?>[] clzs = new Class[2];
-        clzs[0] = String.class;
-        clzs[1] = String.class;
-        return clzs;
-    }
-
-    private Object[] buildProxyArguments(LsjGRpcClient lsjGRpcClient) {
-        Object[] objects = new Object[2];
-        objects[0] = lsjGRpcClient.serviceName();
-        objects[1] = lsjGRpcClient.componentId();
-        return objects;
     }
 }

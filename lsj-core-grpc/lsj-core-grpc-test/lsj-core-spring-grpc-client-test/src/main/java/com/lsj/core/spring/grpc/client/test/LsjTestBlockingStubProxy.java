@@ -13,10 +13,6 @@ import com.lsj.core.spring.grpc.core.annotation.LsjGRpcClient;
 @LsjGRpcClient(serviceName = "core-grpc-server-test", componentId = "lsjTestService")
 public class LsjTestBlockingStubProxy extends LsjGrpcStubBaseProxy<LsjTestGrpc.LsjTestBlockingStub> {
 
-    protected LsjTestBlockingStubProxy(String serviceName, String componentId) {
-        super(serviceName, componentId);
-    }
-
     public String doTest() {
         LsjRequest request = LsjRequest.newBuilder().build();
         LsjReply reply = getStub().doTest(request);
