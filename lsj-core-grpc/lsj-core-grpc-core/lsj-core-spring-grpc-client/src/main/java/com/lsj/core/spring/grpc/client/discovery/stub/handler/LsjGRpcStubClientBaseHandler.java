@@ -10,9 +10,7 @@ import io.grpc.stub.AbstractBlockingStub;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Constructor;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
@@ -28,6 +26,8 @@ public abstract class LsjGRpcStubClientBaseHandler<T extends AbstractBlockingStu
     private final ConcurrentMap<String, ManagedChannel> managedChannelMap = new ConcurrentHashMap<>();
 
     private final ConcurrentMap<String, ConcurrentMap<String, T>> stubMap = new ConcurrentHashMap<>();
+
+    private final Set<String> subscribeServiceSet = new HashSet<>();
 
     @Override
     public T handle(LsjGRpcBaseServiceInstance serviceInstance, Class<T> stubClass) {
@@ -69,8 +69,14 @@ public abstract class LsjGRpcStubClientBaseHandler<T extends AbstractBlockingStu
                 }
             }, managedChannel);
             try {
-                //todo lsj 重复的不重复订阅
-                subscribe(serviceInstance);
+                if (!subscribeServiceSet.contains(serviceInstance.getServiceId())) {
+                    synchronized (LsjGRpcStubClientBaseHandler.class) {
+                        if (!subscribeServiceSet.contains(serviceInstance.getServiceId())) {
+                            subscribe(serviceInstance);
+                            subscribeServiceSet.add(serviceInstance.getServiceId());
+                        }
+                    }
+                }
             } catch (Exception e) {
                 log.error("[{}][{}]服务订阅失败", discoveryTypeName(), serviceInstance.getServiceId());
                 throw new RuntimeException(e);
