@@ -1,5 +1,8 @@
 package com.lsj.core.spring.grpc.client.discovery.stub;
 
+import com.lsj.core.spring.grpc.client.discovery.LsjGRpcClientDiscoveryHandler;
+import com.lsj.core.spring.grpc.client.discovery.LsjGRpcClientDiscoveryManager;
+import com.lsj.core.spring.grpc.client.model.DiscoveryBuildStubParam;
 import io.grpc.stub.AbstractBlockingStub;
 import lombok.Getter;
 
@@ -18,4 +21,16 @@ public abstract class LsjGrpcStubBaseProxy<T extends AbstractBlockingStub<T>> im
         this.serviceName = serviceName;
         this.componentId = componentId;
     }
+
+    @Override
+    public T getStub() {
+        LsjGRpcClientDiscoveryHandler discoveryHandler =
+                LsjGRpcClientDiscoveryManager.getDiscoveryHandler();
+        DiscoveryBuildStubParam param = new DiscoveryBuildStubParam();
+        param.setComponentId(componentId);
+        param.setServiceName(serviceName);
+        return discoveryHandler.buildStub(param, getStubClass());
+    }
+
+    protected abstract Class<T> getStubClass();
 }

@@ -3,10 +3,7 @@ package com.lsj.core.spring.grpc.client.test;
 import com.lsj.core.grpc.server.test.LsjReply;
 import com.lsj.core.grpc.server.test.LsjRequest;
 import com.lsj.core.grpc.server.test.LsjTestGrpc;
-import com.lsj.core.spring.grpc.client.discovery.LsjGRpcClientDiscoveryHandler;
-import com.lsj.core.spring.grpc.client.discovery.LsjGRpcClientDiscoveryManager;
 import com.lsj.core.spring.grpc.client.discovery.stub.LsjGrpcStubBaseProxy;
-import com.lsj.core.spring.grpc.client.model.DiscoveryBuildStubParam;
 
 /**
  * @author lishangjian
@@ -18,15 +15,9 @@ public class LsjTestBlockingStubProxy extends LsjGrpcStubBaseProxy<LsjTestGrpc.L
         super(serviceName, componentId);
     }
 
-
     @Override
-    public LsjTestGrpc.LsjTestBlockingStub getStub() {
-        LsjGRpcClientDiscoveryHandler discoveryHandler =
-                LsjGRpcClientDiscoveryManager.getDiscoveryHandler();
-        DiscoveryBuildStubParam param = new DiscoveryBuildStubParam();
-        param.setComponentId(componentId);
-        param.setServiceName(serviceName);
-        return discoveryHandler.buildStub(param, LsjTestGrpc.LsjTestBlockingStub.class);
+    protected Class<LsjTestGrpc.LsjTestBlockingStub> getStubClass() {
+        return LsjTestGrpc.LsjTestBlockingStub.class;
     }
 
     public String doTest() {

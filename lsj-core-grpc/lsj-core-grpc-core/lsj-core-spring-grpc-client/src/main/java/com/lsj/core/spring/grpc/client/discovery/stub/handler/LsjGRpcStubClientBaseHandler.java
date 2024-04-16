@@ -69,6 +69,7 @@ public abstract class LsjGRpcStubClientBaseHandler<T extends AbstractBlockingStu
                 }
             }, managedChannel);
             try {
+                //todo lsj 重复的不重复订阅
                 subscribe(serviceInstance);
             } catch (Exception e) {
                 log.error("[{}][{}]服务订阅失败", discoveryTypeName(), serviceInstance.getServiceId());
