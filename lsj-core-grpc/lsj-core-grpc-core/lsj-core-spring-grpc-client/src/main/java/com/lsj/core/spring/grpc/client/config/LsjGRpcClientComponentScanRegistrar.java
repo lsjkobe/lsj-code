@@ -1,47 +1,87 @@
 package com.lsj.core.spring.grpc.client.config;
 
+import com.lsj.core.spring.grpc.client.annotation.EnableLsjGRpcClient;
 import com.lsj.core.spring.grpc.core.annotation.LsjGRpcClient;
-import io.grpc.ManagedChannel;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.cglib.proxy.Enhancer;
-import org.springframework.cglib.proxy.MethodInterceptor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
+import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.util.ClassUtils;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author lishangjian
  * @date 2024/4/8 17:25
  */
-public class LsjGRpcClientComponentScanRegistrar implements BeanPostProcessor {
-
+public class LsjGRpcClientComponentScanRegistrar implements ImportBeanDefinitionRegistrar {
     @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        Class<?> clazz = bean.getClass();
-        while (clazz != null) {
-            for (Field field : clazz.getDeclaredFields()) {
-                if (field.isAnnotationPresent(LsjGRpcClient.class)) {
-                    // 处理带有@LsjGRpcClient注解的字段
-                    field.setAccessible(true); // 允许访问私有字段
-                    // 这里可以添加处理逻辑，例如获取注解的值，或者调用特定的方法
-                    // 例如，获取注解实例
-                    LsjGRpcClient lsjGRpcClient = field.getAnnotation(LsjGRpcClient.class);
-                    try {
-                        Class<?>[] argumentTypes = buildProxyArgumentTypes();
-                        Object[] arguments = buildProxyArguments(lsjGRpcClient);
-                        field.set(bean, getProxy(clazz, field, argumentTypes, arguments));
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-            clazz = clazz.getSuperclass();
+    public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
+        Map<String, Object> annotationAttributes = metadata.getAnnotationAttributes(EnableLsjGRpcClient.class.getName());
+        Set<String> basePackages = getBasePackages(metadata, annotationAttributes);
+        ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
+        scanner.addIncludeFilter(new AnnotationTypeFilter(LsjGRpcClient.class));
+        // 扫描添加了@LsjGRpcClient注解的类
+        for (String packagePath : basePackages) {
+            registerBeanFromPackage(scanner, packagePath, registry);
         }
-        return bean;
+    }
+
+    private void registerBeanFromPackage(
+            ClassPathScanningCandidateComponentProvider scanner,
+            String packagePath, BeanDefinitionRegistry registry) {
+        // 扫描包路径下的所有类
+        Set<BeanDefinition> beanDefinitions = scanner.findCandidateComponents(packagePath);
+        try {
+            for (BeanDefinition beanDefinition : beanDefinitions) {
+                // 获取类名
+                String beanClassName = Objects.requireNonNull(beanDefinition.getBeanClassName());
+                // 加载类
+                Class<?> clazz = Class.forName(beanClassName);
+                String beanName;
+                // 获取注解
+                LsjGRpcClient lsjGRpcServiceAnnotation = clazz.getAnnotation(LsjGRpcClient.class);
+                if (StringUtils.isNotBlank(lsjGRpcServiceAnnotation.value())) {
+                    beanName = lsjGRpcServiceAnnotation.value();
+                } else {
+                    String className = ClassUtils.getShortName(beanClassName);
+                    beanName = className.substring(0, 1).toLowerCase() + className.substring(1);
+                }
+                Class<?>[] argumentTypes = buildProxyArgumentTypes();
+                Object[] arguments = buildProxyArguments(lsjGRpcServiceAnnotation);
+                // 创建BeanDefinition
+                BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(clazz);
+                // 添加构造参数
+                for (int i = 0; i < argumentTypes.length; i++) {
+                    beanDefinitionBuilder.addConstructorArgValue(arguments[i]);
+                }
+                // 将扫描到的bean注册到Spring容器
+                registry.registerBeanDefinition(beanName, beanDefinitionBuilder.getBeanDefinition());
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected Set<String> getBasePackages(AnnotationMetadata metadata, Map<String, Object> attributes) {
+        Set<String> basePackages = new HashSet<>();
+        for (String pkg : (String[]) attributes.get("basePackages")) {
+            if (StringUtils.isNotBlank(pkg)) {
+                basePackages.add(pkg);
+            }
+        }
+        if (basePackages.isEmpty()) {
+            basePackages.add(
+                    ClassUtils.getPackageName(metadata.getClassName()));
+        }
+        return basePackages;
     }
 
     private Class<?>[] buildProxyArgumentTypes() {
@@ -56,52 +96,5 @@ public class LsjGRpcClientComponentScanRegistrar implements BeanPostProcessor {
         objects[0] = lsjGRpcClient.serviceName();
         objects[1] = lsjGRpcClient.componentId();
         return objects;
-    }
-
-    private Object getProxy(Class<?> clazz, Field field, Class<?>[] argumentTypes, Object[] arguments) {
-        Class<?> fieldClass = field.getType();
-        if (field.getType().isInterface()) {
-            // 根据注解的属性执行相应的操作
-            return Proxy.newProxyInstance(clazz.getClassLoader(),
-                    new Class[]{fieldClass}, new GrpcClientInvocationHandler(null, fieldClass));
-        } else {
-            Enhancer enhancer = new Enhancer();
-            //Cglib代理基于创建子类重写父类方法实现，所以这里要确定父类，也就是被代理类。
-            enhancer.setSuperclass(fieldClass);
-            /*
-            创建了一个MethodInterceptor拦截器接口的实现类对象，重写intercept回调方法，
-            参数依次为：代理对象、代理方法、方法参数、方法代理
-            */
-            MethodInterceptor interceptor = (o, method, objects, methodProxy) -> {
-                System.out.println("这是前置增强");
-                Object res = methodProxy.invokeSuper(o, objects);
-                System.out.println("这是后置增强");
-                return res;
-            };
-            enhancer.setCallback(interceptor);
-            return enhancer.create(argumentTypes, arguments);
-        }
-    }
-
-    private static class GrpcClientInvocationHandler implements InvocationHandler {
-        private final ManagedChannel channel;
-        private final Class<?> stubClass;
-
-        public GrpcClientInvocationHandler(ManagedChannel channel, Class<?> stubClass) {
-            this.channel = channel;
-            this.stubClass = stubClass;
-        }
-
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            // 根据方法名和参数，调用gRPC服务端的方法
-            // 这里需要根据实际情况生成代理对象的方法调用逻辑
-            return null;
-        }
-    }
-
-    @PostConstruct
-    void init() {
-
     }
 }

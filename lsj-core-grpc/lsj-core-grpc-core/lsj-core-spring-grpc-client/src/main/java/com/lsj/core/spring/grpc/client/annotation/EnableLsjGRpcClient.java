@@ -16,4 +16,5 @@ import java.lang.annotation.*;
 @Import({LsjGRpcClientComponentScanRegistrar.class, LsjGRpcClientAllConfig.class})
 public @interface EnableLsjGRpcClient {
 
+    String[] basePackages() default {};
 }

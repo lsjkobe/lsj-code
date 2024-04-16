@@ -1,6 +1,7 @@
 package com.lsj.core.spring.grpc.client.test;
 
-import com.lsj.core.spring.grpc.core.annotation.LsjGRpcClient;
+import com.lsj.core.spring.grpc.client.test.stubproxy.GreeterBlockingStubProxy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("test")
 public class LsjTest {
 
-    @LsjGRpcClient(serviceName = "core-grpc-server-test", componentId = "helloWorldService")
+    @Autowired
     private GreeterBlockingStubProxy greeterBlockingStubProxy;
 
-    @LsjGRpcClient(serviceName = "core-grpc-server-test", componentId = "lsjTestService")
+    @Autowired
     private LsjTestBlockingStubProxy lsjTestBlockingStubProxy;
 
     @GetMapping("test")

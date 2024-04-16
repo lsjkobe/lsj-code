@@ -25,11 +25,10 @@ public class LsjGRpcComponentScanRegistrar implements ImportBeanDefinitionRegist
     public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
         Map<String, Object> annotationAttributes = metadata.getAnnotationAttributes(EnableLsjGRpc.class.getName());
         String[] grpcServicePath = (String[]) annotationAttributes.get("grpcServicePath");
-
+        ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
+        scanner.addIncludeFilter(new AnnotationTypeFilter(LsjGRpcService.class));
         // 扫描添加了@LsjGRpcService注解的类
         for (String packagePath : grpcServicePath) {
-            ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
-            scanner.addIncludeFilter(new AnnotationTypeFilter(LsjGRpcService.class));
             // 扫描包路径下的所有类
             Set<BeanDefinition> beanDefinitions = scanner.findCandidateComponents(packagePath);
             try {

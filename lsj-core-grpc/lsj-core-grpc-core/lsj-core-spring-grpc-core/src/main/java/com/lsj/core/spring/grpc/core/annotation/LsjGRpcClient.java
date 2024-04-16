@@ -11,6 +11,8 @@ import java.lang.annotation.*;
 @Documented
 public @interface LsjGRpcClient {
 
+    String value() default "";
+
     String serviceName();
 
     String componentId();
