@@ -5,11 +5,9 @@ import com.lsj.core.spring.grpc.discovery.nacos.config.LsjGRpcNacosNameServiceMa
 import com.lsj.core.spring.grpc.discovery.nacos.config.properties.LsjGRpcServerDiscoveryNacosProperties;
 import com.lsj.core.spring.grpc.server.nacos.serviceregistry.LsjGRpcNacosServiceRegistrant;
 import com.lsj.core.spring.grpc.server.serviceregistry.ILsjGRpcServiceRegistrant;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
 /**
  * @author lishangjian

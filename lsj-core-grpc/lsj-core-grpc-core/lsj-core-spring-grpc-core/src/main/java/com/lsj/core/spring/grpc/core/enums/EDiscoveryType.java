@@ -7,5 +7,7 @@ package com.lsj.core.spring.grpc.core.enums;
 public enum EDiscoveryType {
 
     NACOS,
+
+    ETCD,
     ;
 }

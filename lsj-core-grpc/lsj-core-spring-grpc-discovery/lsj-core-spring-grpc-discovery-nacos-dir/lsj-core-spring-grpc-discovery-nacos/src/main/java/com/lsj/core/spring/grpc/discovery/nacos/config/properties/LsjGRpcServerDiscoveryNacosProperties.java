@@ -8,6 +8,8 @@ import com.lsj.commonutil.util.common.InetUtils;
 import com.lsj.core.spring.grpc.core.consts.LsjGRpcConst;
 import com.lsj.core.spring.grpc.core.properties.LsjGRpcDiscoveryInfoProperties;
 import jakarta.annotation.PostConstruct;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -21,6 +23,8 @@ import java.util.Properties;
  * @author lishangjian
  * @date 2024/3/30 18:18
  */
+@EqualsAndHashCode(callSuper = true)
+@Data
 @ConfigurationProperties(value = LsjGRpcConst.CONST_DISCOVERY_PROPERTIES_PATH + ".nacos")
 public class LsjGRpcServerDiscoveryNacosProperties extends LsjGRpcDiscoveryInfoProperties {
 
@@ -56,11 +60,6 @@ public class LsjGRpcServerDiscoveryNacosProperties extends LsjGRpcDiscoveryInfoP
      * cluster name for nacos .
      */
     private String clusterName = "DEFAULT";
-
-    /**
-     * group name for nacos.
-     */
-    private String group = "DEFAULT_GROUP";
 
     /**
      * naming load from local cache at application start. true is load.
@@ -135,99 +134,4 @@ public class LsjGRpcServerDiscoveryNacosProperties extends LsjGRpcDiscoveryInfoP
         }
     }
 
-    public String getEndpoint() {
-        return endpoint;
-    }
-
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
-    }
-
-    public String getNamespace() {
-        return namespace;
-    }
-
-    public void setNamespace(String namespace) {
-        this.namespace = namespace;
-    }
-
-    public String getLogName() {
-        return logName;
-    }
-
-    public void setLogName(String logName) {
-        this.logName = logName;
-    }
-
-    public boolean isSecure() {
-        return secure;
-    }
-
-    public void setSecure(boolean secure) {
-        this.secure = secure;
-    }
-
-    public String getAccessKey() {
-        return accessKey;
-    }
-
-    public void setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
-    }
-
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-    }
-
-    public String getClusterName() {
-        return clusterName;
-    }
-
-    public void setClusterName(String clusterName) {
-        this.clusterName = clusterName;
-    }
-
-    public String getNamingLoadCacheAtStart() {
-        return namingLoadCacheAtStart;
-    }
-
-    public void setNamingLoadCacheAtStart(String namingLoadCacheAtStart) {
-        this.namingLoadCacheAtStart = namingLoadCacheAtStart;
-    }
-
-    public String getGroup() {
-        return group;
-    }
-
-    public void setGroup(String group) {
-        this.group = group;
-    }
-
-    public boolean isEphemeral() {
-        return ephemeral;
-    }
-
-    public void setEphemeral(boolean ephemeral) {
-        this.ephemeral = ephemeral;
-    }
-
-    public boolean isInstanceEnabled() {
-        return instanceEnabled;
-    }
-
-    public void setInstanceEnabled(boolean instanceEnabled) {
-        this.instanceEnabled = instanceEnabled;
-    }
-
-    public Map<String, String> getMetadata() {
-        return metadata;
-    }
-
-    public void setMetadata(Map<String, String> metadata) {
-        this.metadata = metadata;
-    }
 }

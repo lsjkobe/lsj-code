@@ -2,6 +2,8 @@ package com.lsj.core.spring.grpc.core.properties;
 
 import lombok.Data;
 
+import java.time.Duration;
+
 /**
  * @author lishangjian
  * @date 2024/3/29 17:16
@@ -9,8 +11,13 @@ import lombok.Data;
 @Data
 public class LsjGRpcDiscoveryInfoProperties {
 
+    public static final Duration DEFAULT_TTL = Duration.ofSeconds(30);
+
     private Boolean enabled;
 
+    /**
+     * 多个逗号隔开.
+     */
     private String host;
 
     private String userName;
@@ -34,4 +41,14 @@ public class LsjGRpcDiscoveryInfoProperties {
      */
     private int port = -1;
 
+    /**
+     * group name.
+     */
+    private String group = "DEFAULT_GROUP";
+
+    /**
+     * 保活 默认30秒.
+     * 服务30秒没有保持心跳，则剔除服务
+     */
+    private Duration ttl = DEFAULT_TTL;
 }

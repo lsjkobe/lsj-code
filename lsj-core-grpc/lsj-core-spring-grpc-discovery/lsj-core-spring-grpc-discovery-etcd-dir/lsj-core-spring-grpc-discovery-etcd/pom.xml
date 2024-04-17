@@ -5,32 +5,26 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.lsj</groupId>
-    <artifactId>lsj-core-grpc-server-test</artifactId>
+    <artifactId>lsj-core-spring-grpc-discovery-etcd</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jetcd-version>0.7.7</jetcd-version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.lsj</groupId>
-            <artifactId>lsj-core-grpc-server-stub-test</artifactId>
+            <artifactId>lsj-core-spring-grpc-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.lsj</groupId>
-            <artifactId>lsj-core-spring-grpc-server-nacos</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lsj</groupId>
-            <artifactId>lsj-core-spring-grpc-server-etcd</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>io.etcd</groupId>
+            <artifactId>jetcd-core</artifactId>
+            <version>${jetcd-version}</version>
         </dependency>
     </dependencies>
-
-
 </project>
