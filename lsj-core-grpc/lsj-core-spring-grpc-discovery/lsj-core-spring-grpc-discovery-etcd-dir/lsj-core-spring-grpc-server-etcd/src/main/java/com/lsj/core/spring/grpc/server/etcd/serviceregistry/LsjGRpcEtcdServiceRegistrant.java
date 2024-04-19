@@ -11,11 +11,18 @@ import io.etcd.jetcd.ByteSequence;
 import io.etcd.jetcd.Client;
 import io.etcd.jetcd.KV;
 import io.etcd.jetcd.Lease;
+import io.etcd.jetcd.kv.PutResponse;
+import io.etcd.jetcd.lease.LeaseGrantResponse;
 import io.etcd.jetcd.lease.LeaseKeepAliveResponse;
 import io.etcd.jetcd.options.PutOption;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
 
 /**
  * @author lishangjian
@@ -35,43 +42,49 @@ public class LsjGRpcEtcdServiceRegistrant extends LsjGRpcBaseServiceRegistrant<L
 
 
     @Override
-    protected void doRegister(LsjGRpcRegistration registration) {
+    protected void doRegister(LsjGRpcRegistration registration,
+                              Consumer<LsjGRpcRegistration> offlineCallback) {
         if (StringUtils.isEmpty(registration.getServiceId())) {
-//            logger.warn("No service to register for nacos client...");
+            log.warn("No service to register for etcd ...");
             return;
         }
-        Client etchClient = lsjGRpcEtcdClientManager.getClient();
-        String serviceId = registration.getServiceId();
-        String group = discoveryProperties.getGroup();
+        try {
+            Client etchClient = lsjGRpcEtcdClientManager.getClient();
+            String serviceId = registration.getServiceId();
+            String group = discoveryProperties.getGroup();
 
-        Lease leaseClient = etchClient.getLeaseClient();
-        long ttl = discoveryProperties.getTtl() == null ?
-                LsjGRpcDiscoveryInfoProperties.DEFAULT_TTL.toSeconds() : discoveryProperties.getTtl().toSeconds();
-        // put操作时的可选项，在这里指定租约ID
-        leaseClient.grant(ttl).thenAccept(leaseGrantResponse -> {
+            Lease leaseClient = etchClient.getLeaseClient();
+            long ttl = discoveryProperties.getTtl() == null ?
+                    LsjGRpcDiscoveryInfoProperties.DEFAULT_TTL.toSeconds() : discoveryProperties.getTtl().toSeconds();
+            // put操作时的可选项，在这里指定租约ID
+            LeaseGrantResponse leaseGrantResponse = leaseClient.grant(ttl).get(10, TimeUnit.SECONDS);
             long leaseId = leaseGrantResponse.getID();
             PutOption putOption = PutOption.builder().withLeaseId(leaseId).build();
             KV kvClient = etchClient.getKVClient();
             ByteSequence key = LsjGRpcEtcdUtil.bytesOf(serviceId);
             ByteSequence value = LsjGRpcEtcdUtil.bytesOf(registration);
-            kvClient.put(key, value, putOption).thenAccept(putResponse ->
-                    leaseClient.keepAlive(leaseId, new StreamObserver<>() {
-                        @Override
-                        public void onNext(LeaseKeepAliveResponse value1) {
-                            log.info("[{}][{}]ETCD服务续租完成", group, serviceId);
-                        }
+            PutResponse putResponse = kvClient.put(key, value, putOption).get(10, TimeUnit.SECONDS);
+            leaseClient.keepAlive(leaseId, new StreamObserver<>() {
+                @Override
+                public void onNext(LeaseKeepAliveResponse value1) {
+                }
 
-                        @Override
-                        public void onError(Throwable t) {
-                            log.error("[{}][{}]ETCD服务续租失败", group, serviceId, t);
-                        }
+                @Override
+                public void onError(Throwable t) {
+                    log.error("[{}][{}]ETCD服务续租失败", group, serviceId, t);
+                }
 
-                        @Override
-                        public void onCompleted() {
-                            log.info("[{}][{}]ETCD服务续租结束", group, serviceId);
-                        }
-                    }));
-        });
+                @Override
+                public void onCompleted() {
+                    log.info("[{}][{}]ETCD服务续租结束", group, serviceId);
+                    offlineCallback.accept(registration);
+                }
+            });
+        } catch (TimeoutException e) {
+            throw new RuntimeException("服务注册失败:连接超时", e);
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException("服务注册失败", e);
+        }
     }
 
     @Override

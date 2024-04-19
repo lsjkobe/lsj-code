@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.function.Consumer;
+
 import static org.springframework.util.ReflectionUtils.rethrowRuntimeException;
 
 /**
@@ -34,7 +36,8 @@ public class LsjGRpcNacosServiceRegistrant extends LsjGRpcBaseServiceRegistrant<
     }
 
     @Override
-    protected void doRegister(LsjGRpcRegistration registration) {
+    protected void doRegister(LsjGRpcRegistration registration,
+                              Consumer<LsjGRpcRegistration> offlineCallback) {
         if (StringUtils.isEmpty(registration.getServiceId())) {
 //            logger.warn("No service to register for nacos client...");
             return;
