@@ -34,11 +34,6 @@ public class LsjGRpcServerDiscoveryNacosProperties extends LsjGRpcDiscoveryInfoP
      */
     private String endpoint;
 
-    /**
-     * namespace, separation registry of different environments.
-     */
-    private String namespace;
-
     private String logName;
 
     /**
@@ -92,7 +87,7 @@ public class LsjGRpcServerDiscoveryNacosProperties extends LsjGRpcDiscoveryInfoP
         properties.put(PropertyKeyConst.SERVER_ADDR, getHost());
         properties.put(PropertyKeyConst.USERNAME, Objects.toString(getUserName(), ""));
         properties.put(PropertyKeyConst.PASSWORD, Objects.toString(getUserPwd(), ""));
-        properties.put(PropertyKeyConst.NAMESPACE, namespace);
+        properties.put(PropertyKeyConst.NAMESPACE, getNamespace());
         properties.put(UtilAndComs.NACOS_NAMING_LOG_NAME, logName);
 
         if (endpoint.contains(":")) {
@@ -124,7 +119,8 @@ public class LsjGRpcServerDiscoveryNacosProperties extends LsjGRpcDiscoveryInfoP
         }
         setHost(serverAddr);
         endpoint = Objects.toString(endpoint, "");
-        namespace = Objects.toString(namespace, "");
+        String namespace = Objects.toString(getNamespace(), "");
+        setNamespace(namespace);
         logName = Objects.toString(logName, "");
         accessKey = Objects.toString(accessKey, "");
         secretKey = Objects.toString(secretKey, "");

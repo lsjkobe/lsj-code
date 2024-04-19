@@ -47,6 +47,11 @@ public class LsjGRpcDiscoveryInfoProperties {
     private String group = "DEFAULT_GROUP";
 
     /**
+     * namespace, separation registry of different environments.
+     */
+    private String namespace = "DEFAULT_NAMESPACE";
+
+    /**
      * 保活 默认30秒.
      * 服务30秒没有保持心跳，则剔除服务
      */

@@ -52,7 +52,7 @@ public class LsjGRpcEtcdServiceRegistrant extends LsjGRpcBaseServiceRegistrant<L
             Client etchClient = lsjGRpcEtcdClientManager.getClient();
             String serviceId = registration.getServiceId();
             String group = discoveryProperties.getGroup();
-
+            String namespace = discoveryProperties.getNamespace();
             Lease leaseClient = etchClient.getLeaseClient();
             long ttl = discoveryProperties.getTtl() == null ?
                     LsjGRpcDiscoveryInfoProperties.DEFAULT_TTL.toSeconds() : discoveryProperties.getTtl().toSeconds();
@@ -61,7 +61,7 @@ public class LsjGRpcEtcdServiceRegistrant extends LsjGRpcBaseServiceRegistrant<L
             long leaseId = leaseGrantResponse.getID();
             PutOption putOption = PutOption.builder().withLeaseId(leaseId).build();
             KV kvClient = etchClient.getKVClient();
-            ByteSequence key = LsjGRpcEtcdUtil.bytesOf(serviceId);
+            ByteSequence key = LsjGRpcEtcdUtil.bytesOf(LsjGRpcEtcdUtil.buildServiceKey(namespace, group, serviceId));
             ByteSequence value = LsjGRpcEtcdUtil.bytesOf(registration);
             PutResponse putResponse = kvClient.put(key, value, putOption).get(10, TimeUnit.SECONDS);
             leaseClient.keepAlive(leaseId, new StreamObserver<>() {

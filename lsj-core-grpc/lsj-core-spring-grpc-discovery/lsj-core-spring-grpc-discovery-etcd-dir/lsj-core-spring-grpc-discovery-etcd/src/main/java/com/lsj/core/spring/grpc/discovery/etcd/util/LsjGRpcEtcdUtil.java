@@ -28,4 +28,13 @@ public class LsjGRpcEtcdUtil {
     public static ByteSequence bytesOf(Object obj) {
         return bytesOf(JsonUtil.toJson(obj));
     }
+
+
+    public static String buildServicePrefix(String namespace, String group) {
+        return "/" + namespace + "/" + group + "/";
+    }
+
+    public static String buildServiceKey(String namespace, String group, String serviceId) {
+        return buildServicePrefix(namespace, group) + serviceId;
+    }
 }
