@@ -19,5 +19,4 @@ public class LsjGRpcProperties {
 
     private LsjGRpcDiscoveryProperties discovery = new LsjGRpcDiscoveryProperties();
 
-    private LsjGRpcClientProperties client = new LsjGRpcClientProperties();
 }

@@ -1,6 +1,8 @@
 package com.lsj.core.spring.grpc.discovery.etcd.config;
 
 import com.lsj.core.spring.grpc.discovery.etcd.config.properties.LsjGRpcServerDiscoveryEtcdProperties;
+import com.lsj.core.spring.grpc.discovery.etcd.util.LsjGRpcEtcdUtil;
+import io.etcd.jetcd.ByteSequence;
 import io.etcd.jetcd.Client;
 import org.apache.commons.lang3.StringUtils;
 
@@ -33,7 +35,10 @@ public class LsjGRpcEtcdClientManager {
 
     private Client createNewClient() {
         checkProperties(discoveryEtcdProperties);
-        return Client.builder().endpoints(discoveryEtcdProperties.getHost().split(",")).build();
+        ByteSequence namespaceBs = LsjGRpcEtcdUtil.bytesOf(
+                LsjGRpcEtcdUtil.buildNamespace(discoveryEtcdProperties.getNamespace()));
+        return Client.builder().endpoints(discoveryEtcdProperties.getHost().split(","))
+                .namespace(namespaceBs).build();
     }
 
     private void checkProperties(LsjGRpcServerDiscoveryEtcdProperties discoveryEtcdProperties) {

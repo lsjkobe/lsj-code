@@ -1,5 +1,6 @@
 package com.lsj.core.spring.grpc.core.properties;
 
+import com.lsj.core.spring.grpc.core.enums.EDiscoveryType;
 import lombok.Data;
 
 /**
@@ -16,4 +17,8 @@ public class LsjGRpcDiscoveryProperties {
      */
     private String name;
 
+    /**
+     * 客户端使用的服务发现类型.
+     */
+    private EDiscoveryType discoveryType;
 }

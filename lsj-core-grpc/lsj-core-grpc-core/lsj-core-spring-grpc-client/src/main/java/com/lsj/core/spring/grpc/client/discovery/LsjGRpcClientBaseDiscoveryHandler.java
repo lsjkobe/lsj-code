@@ -37,7 +37,7 @@ public abstract class LsjGRpcClientBaseDiscoveryHandler implements LsjGRpcClient
     @Override
     public <T extends AbstractBlockingStub<T>> T buildStub(DiscoveryBuildStubParam param, Class<T> stubClass) {
         LsjGRpcServiceInstanceChooser<?> serviceInstanceChooser =
-                loadBalancerClientFactory.getInstance(param, gRpcProperties.getClient().getDiscoveryType());
+                loadBalancerClientFactory.getInstance(param, gRpcProperties.getDiscovery().getDiscoveryType());
         LsjGRpcBaseServiceInstance serviceInstance = serviceInstanceChooser.choose(param);
         if (serviceInstance == null) {
             log.error("[][] [{}]/[{}] 服务不存在", param.getServiceName(), param.getComponentId());
@@ -47,7 +47,7 @@ public abstract class LsjGRpcClientBaseDiscoveryHandler implements LsjGRpcClient
             serviceInstance.setServiceId(param.buildServiceId());
         }
         ILsjGRpcStubClientHandler<T> stubClientHandler =
-                stubClientFactory.getInstance(gRpcProperties.getClient().getDiscoveryType());
+                stubClientFactory.getInstance(gRpcProperties.getDiscovery().getDiscoveryType());
         return stubClientHandler.handle(serviceInstance, stubClass);
     }
 

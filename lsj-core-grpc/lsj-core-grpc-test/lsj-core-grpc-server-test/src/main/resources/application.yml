@@ -12,6 +12,7 @@ lsj:
       etcd:
         enabled: true
         host: http://127.0.0.1:2379
+        namespace: dev
     port: 9094
 spring:
   application:

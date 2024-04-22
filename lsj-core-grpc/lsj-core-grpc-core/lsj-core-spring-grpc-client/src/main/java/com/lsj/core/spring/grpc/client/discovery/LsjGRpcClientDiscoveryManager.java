@@ -1,12 +1,10 @@
 package com.lsj.core.spring.grpc.client.discovery;
 
 import com.lsj.core.spring.grpc.core.enums.EDiscoveryType;
-import com.lsj.core.spring.grpc.core.util.SpringContextUtil;
 import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 
-import javax.annotation.PostConstruct;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,22 +14,20 @@ import java.util.Map;
 
 public class LsjGRpcClientDiscoveryManager {
 
-    private static Map<EDiscoveryType, LsjGRpcClientDiscoveryHandler> HANDLER;
+    private static final Map<EDiscoveryType, LsjGRpcClientDiscoveryHandler> HANDLER = new HashMap<>();;
 
     private static LsjGRpcProperties properties = null;
 
-    public LsjGRpcClientDiscoveryManager(LsjGRpcProperties properties) {
-        LsjGRpcClientDiscoveryManager.properties = properties;
-    }
+    private List<LsjGRpcClientDiscoveryHandler> discoveryHandlerList;
 
-    @PostConstruct
-    public void init() {
-        HANDLER = new HashMap<>();
-        Collection<LsjGRpcClientDiscoveryHandler> list = SpringContextUtil.getBeansOfType(LsjGRpcClientDiscoveryHandler.class).values();
-        list.forEach(item -> HANDLER.put(item.type(), item));
+    public LsjGRpcClientDiscoveryManager(LsjGRpcProperties properties,
+                                         List<LsjGRpcClientDiscoveryHandler> discoveryHandlerList) {
+        LsjGRpcClientDiscoveryManager.properties = properties;
+        this.discoveryHandlerList = discoveryHandlerList;
+        this.discoveryHandlerList.forEach(item -> HANDLER.put(item.type(), item));
     }
 
     public static LsjGRpcClientDiscoveryHandler getDiscoveryHandler() {
-        return HANDLER.get(properties.getClient().getDiscoveryType());
+        return HANDLER.get(properties.getDiscovery().getDiscoveryType());
     }
 }

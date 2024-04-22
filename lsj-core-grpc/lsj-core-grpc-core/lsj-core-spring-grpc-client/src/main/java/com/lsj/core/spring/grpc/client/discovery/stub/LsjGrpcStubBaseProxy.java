@@ -6,6 +6,7 @@ import com.lsj.core.spring.grpc.client.model.DiscoveryBuildStubParam;
 import io.grpc.stub.AbstractBlockingStub;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -14,6 +15,7 @@ import java.lang.reflect.Type;
  * @author lishangjian
  * @date 2024/4/11 下午2:09
  */
+@Slf4j
 @Setter
 @Getter
 public abstract class LsjGrpcStubBaseProxy<T extends AbstractBlockingStub<T>> implements LsjGrpcStubProxy<T> {
@@ -35,6 +37,10 @@ public abstract class LsjGrpcStubBaseProxy<T extends AbstractBlockingStub<T>> im
     public T getStub() {
         LsjGRpcClientDiscoveryHandler discoveryHandler =
                 LsjGRpcClientDiscoveryManager.getDiscoveryHandler();
+        if (discoveryHandler == null) {
+            log.error("未指定客户端服务发现类型");
+            throw new RuntimeException("未指定客户端服务发现类型");
+        }
         DiscoveryBuildStubParam param = new DiscoveryBuildStubParam();
         param.setComponentId(componentId);
         param.setServiceName(serviceName);

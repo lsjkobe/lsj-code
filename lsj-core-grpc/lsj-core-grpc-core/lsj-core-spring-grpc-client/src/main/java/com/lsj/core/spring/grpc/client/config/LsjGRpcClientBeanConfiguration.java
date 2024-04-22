@@ -1,5 +1,6 @@
 package com.lsj.core.spring.grpc.client.config;
 
+import com.lsj.core.spring.grpc.client.discovery.LsjGRpcClientDiscoveryHandler;
 import com.lsj.core.spring.grpc.client.discovery.LsjGRpcClientDiscoveryManager;
 import com.lsj.core.spring.grpc.client.discovery.loadbalancer.LsjGRpcLoadBalancerClientFactory;
 import com.lsj.core.spring.grpc.client.discovery.loadbalancer.LsjGRpcLoadBalancerHandler;
@@ -23,8 +24,9 @@ public class LsjGRpcClientBeanConfiguration {
 
     @Bean
     public LsjGRpcClientDiscoveryManager lsjGRpcClientDiscoveryManager(
-            LsjGRpcProperties properties) {
-        return new LsjGRpcClientDiscoveryManager(properties);
+            LsjGRpcProperties properties,
+            List<LsjGRpcClientDiscoveryHandler> discoveryHandlerList) {
+        return new LsjGRpcClientDiscoveryManager(properties, discoveryHandlerList);
     }
 
     @Bean

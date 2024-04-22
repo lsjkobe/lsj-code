@@ -89,6 +89,11 @@ public abstract class LsjGRpcStubClientBaseHandler<T extends AbstractBlockingStu
 
     protected abstract void subscribe(LsjGRpcBaseServiceInstance serviceInstance) throws Exception;
 
+    /**
+     * 不在列表里的删除.
+     * @param serviceId .
+     * @param serviceInstanceList .
+     */
     protected void handleSubscribe(String serviceId, List<LsjGRpcBaseServiceInstance> serviceInstanceList) {
         ConcurrentMap<String, T> serviceIdMap = stubMap.get(serviceId);
         if (serviceIdMap == null) {
@@ -108,6 +113,30 @@ public abstract class LsjGRpcStubClientBaseHandler<T extends AbstractBlockingStu
                 if (!serviceInstance.isAvailable()) {
                     iterator.remove();
                 }
+            }
+        }
+    }
+
+    /**
+     * 在列表里的删除.
+     * @param serviceId .
+     * @param serviceInstanceList .
+     */
+    protected void handleSubscribeDel(String serviceId, List<LsjGRpcBaseServiceInstance> serviceInstanceList) {
+        ConcurrentMap<String, T> serviceIdMap = stubMap.get(serviceId);
+        if (serviceIdMap == null) {
+            return;
+        }
+        Map<String, LsjGRpcBaseServiceInstance> serviceInstanceMap =
+                serviceInstanceList.stream().collect(Collectors.toMap(this::buildStubKey, x -> x));
+
+        Iterator<Map.Entry<String, T>> iterator = serviceIdMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, T> entry = iterator.next();
+            String stubKey = entry.getKey();
+            LsjGRpcBaseServiceInstance serviceInstance = serviceInstanceMap.get(stubKey);
+            if (serviceInstance != null) {
+                iterator.remove();
             }
         }
     }

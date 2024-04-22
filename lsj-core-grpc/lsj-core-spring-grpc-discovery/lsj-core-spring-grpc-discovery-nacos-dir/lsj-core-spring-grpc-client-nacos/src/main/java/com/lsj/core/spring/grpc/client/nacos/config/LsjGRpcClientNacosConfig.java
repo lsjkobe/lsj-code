@@ -7,8 +7,10 @@ import com.lsj.core.spring.grpc.client.discovery.stub.LsjGRpcStubClientFactory;
 import com.lsj.core.spring.grpc.client.nacos.discovery.LsjGRpcClientNacosDiscoveryHandler;
 import com.lsj.core.spring.grpc.client.nacos.discovery.loadbalancer.LsjGRpcNacosLoadBalancerClient;
 import com.lsj.core.spring.grpc.client.nacos.discovery.stub.handler.LsjGRpcStubClientNacosHandler;
+import com.lsj.core.spring.grpc.core.consts.LsjGRpcConst;
 import com.lsj.core.spring.grpc.core.properties.LsjGRpcProperties;
 import com.lsj.core.spring.grpc.discovery.nacos.config.LsjGRpcNacosNameServiceManager;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2024/4/11 上午10:52
  */
 @Configuration
-//@ConditionalOnProperty(prefix = LsjGRpcConst.CONST_DISCOVERY_PROPERTIES_PATH, value = {"client.discoveryType"}, havingValue = "NACOS")
+@ConditionalOnProperty(prefix = LsjGRpcConst.CONST_DISCOVERY_PROPERTIES_PATH, value = {"discovery-type"}, havingValue = "NACOS")
 public class LsjGRpcClientNacosConfig {
 
     @Bean
