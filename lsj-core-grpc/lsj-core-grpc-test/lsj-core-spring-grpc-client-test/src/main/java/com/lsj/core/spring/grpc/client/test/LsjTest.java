@@ -2,7 +2,10 @@ package com.lsj.core.spring.grpc.client.test;
 
 import com.lsj.core.grpc.server.test.HelloReply;
 import com.lsj.core.grpc.server.test.HelloRequest;
+import com.lsj.core.grpc.server.test.LsjReply;
+import com.lsj.core.grpc.server.test.LsjRequest;
 import com.lsj.core.spring.grpc.client.test.stubproxy.GreeterBlockingStubProxy;
+import com.lsj.core.spring.grpc.client.test.stubproxy.LsjTestBlockingStubProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +27,7 @@ public class LsjTest {
 
     @GetMapping("test")
     public String sendMessage() {
-        lsjTestBlockingStubProxy.doTest();
+        LsjReply lsjReply = lsjTestBlockingStubProxy.doTest(LsjRequest.newBuilder().build());
         HelloReply helloReply = greeterBlockingStubProxy.sayHello(HelloRequest.newBuilder().build());
         return "";
     }

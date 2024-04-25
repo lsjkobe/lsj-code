@@ -10,7 +10,7 @@ lsj:
         host: 43.136.117.137:8848
         namespace: 0713fa77-f644-4937-a6a6-0b444d39eff6
       etcd:
-        enabled: true
+        enabled: false
         host: http://127.0.0.1:2379
         namespace: dev
     port: 9094
