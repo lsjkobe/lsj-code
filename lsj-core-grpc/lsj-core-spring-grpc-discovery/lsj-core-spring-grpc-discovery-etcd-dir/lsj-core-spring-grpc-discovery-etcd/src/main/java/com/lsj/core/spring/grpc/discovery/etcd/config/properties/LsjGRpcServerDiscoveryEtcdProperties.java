@@ -1,9 +1,9 @@
 package com.lsj.core.spring.grpc.discovery.etcd.config.properties;
 
 
-import com.lsj.commonutil.util.common.InetUtils;
 import com.lsj.core.spring.grpc.core.consts.LsjGRpcConst;
 import com.lsj.core.spring.grpc.core.properties.LsjGRpcDiscoveryInfoProperties;
+import com.lsj.core.spring.grpc.core.util.InetUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

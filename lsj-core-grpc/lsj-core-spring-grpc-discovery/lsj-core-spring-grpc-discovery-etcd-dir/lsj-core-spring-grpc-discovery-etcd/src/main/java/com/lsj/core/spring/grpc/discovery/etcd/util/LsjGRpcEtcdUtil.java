@@ -1,7 +1,7 @@
 package com.lsj.core.spring.grpc.discovery.etcd.util;
 
-import com.lsj.commonutil.util.common.JsonUtil;
 import com.lsj.core.spring.grpc.core.model.LsjGRpcBaseServiceInstance;
+import com.lsj.core.spring.grpc.core.util.JsonUtil;
 import io.etcd.jetcd.ByteSequence;
 import io.etcd.jetcd.KeyValue;
 import org.apache.commons.collections.CollectionUtils;
