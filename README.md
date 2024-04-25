@@ -1,3 +1,5 @@
+需要JDK:21
+
 # 依赖install
 ## lsj-core-grpc-core目录
    1. 先mvn install lsj-core-spring-grpc-core
