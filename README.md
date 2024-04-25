@@ -1,4 +1,4 @@
-需要JDK:21
+# 需要JDK:21
 
 # 依赖install
 ## lsj-core-grpc-core目录
