@@ -55,7 +55,7 @@ public class LsjGRpcServiceRegistryManager {
             fluxRegistrant.blockLast();
             log.info("服务发现注册完成");
         } catch (Exception e) {
-            log.error("服务发现注册失败", e);
+            log.error("服务发现注册失败结束", e);
             throw new RuntimeException(e);
         }
 
@@ -68,7 +68,7 @@ public class LsjGRpcServiceRegistryManager {
                                     log.info("[{}]:服务[{}]已注册", registrant.type().name(), re.getServiceId());
                                 })
                                 .onErrorResume(error -> {
-                                    log.error("[{}]:服务[{}]注册失败", registrant.type().name(), re.getServiceId(), error);
+                                    log.error("[{}]:[{}]服务注册失败", registrant.type().name(), re.getServiceId(), error);
                                     return Mono.error(error);
                                 })
                                 .subscribeOn(Schedulers.parallel())

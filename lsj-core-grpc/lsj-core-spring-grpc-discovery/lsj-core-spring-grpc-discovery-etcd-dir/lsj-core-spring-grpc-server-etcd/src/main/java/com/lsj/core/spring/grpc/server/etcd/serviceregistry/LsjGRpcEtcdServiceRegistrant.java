@@ -80,9 +80,9 @@ public class LsjGRpcEtcdServiceRegistrant extends LsjGRpcBaseServiceRegistrant<L
                 }
             });
         } catch (TimeoutException e) {
-            throw new RuntimeException("服务注册失败:连接超时", e);
+            throw new RuntimeException("连接超时", e);
         } catch (ExecutionException | InterruptedException e) {
-            throw new RuntimeException("服务注册失败", e);
+            throw new RuntimeException(e);
         }
     }
 
